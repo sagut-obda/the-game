@@ -7,41 +7,24 @@ package dinos.states;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import dinos.Main;
 
 /**
  *
  * @author hayashi
  */
-public class MainMenuState extends AbstractAppState {
-
-    private SimpleApplication app;
-    private Node rootNode;
-    private final Node localRootNode = new Node("MainMenu");
-    private AssetManager assetManager;
-
-    public MainMenuState(Main aThis) {
-        
+public class MainMenuState extends SagutAppState {
+    public MainMenuState(SimpleApplication sapp) {
+        super(sapp, "Main Menu");
     }
 
     @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        
-        this.app = (SimpleApplication) app;
-        rootNode = this.app.getRootNode();
-        rootNode.attachChild(localRootNode);
-        assetManager = this.app.getAssetManager();
-
+    public void init(AppStateManager stateManager, Application app) {
         // Test purposes only.
         Box b = new Box(1, 1, 1);
         Geometry geom = new Geometry("Box", b);
@@ -51,17 +34,6 @@ public class MainMenuState extends AbstractAppState {
         geom.setMaterial(mat);
 
         localRootNode.attachChild(geom);
-    }
-
-    @Override
-    public void cleanup() {
-        super.cleanup();
-        rootNode.detachChild(localRootNode);
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-
     }
 
     @Override
