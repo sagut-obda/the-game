@@ -6,6 +6,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import com.jme3.system.AppSettings;
 import dinos.states.MainMenuState;
 
 /**
@@ -14,10 +15,20 @@ import dinos.states.MainMenuState;
  * @author normenhansen
  */
 public class Main extends SimpleApplication {
+    public static boolean quickDevelopmentMode = true;
 
     public static void main(String[] args) {
         Main app = new Main();
+        if(quickDevelopmentMode)
+             configForQuickDevelopmentMode(app);
         app.start();
+    }
+    
+    public static void configForQuickDevelopmentMode(SimpleApplication app) {
+        AppSettings apset = new AppSettings(true);
+        apset.setTitle("Kambing");
+        app.setShowSettings(false);
+        app.setSettings(apset);
     }
 
     @Override
