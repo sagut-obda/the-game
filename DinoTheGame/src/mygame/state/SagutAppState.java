@@ -27,7 +27,7 @@ import com.jme3.scene.Node;
  *
  * @author G. Christianto
  */
-public abstract class SagutAppState extends BaseAppState {
+public abstract class SagutAppState extends BaseAppState { 
     protected SimpleApplication sapp;
     protected final Node localRootNode;
     protected final Node rootNode ;
@@ -46,6 +46,7 @@ public abstract class SagutAppState extends BaseAppState {
         this.assetManager = sapp.getAssetManager();
         camera= sapp.getCamera();
         inputManager = sapp.getInputManager();
+        
     }
     
     @Override

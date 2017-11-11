@@ -21,6 +21,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javafx.scene.control.Label;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.Obstacle;
@@ -30,7 +31,7 @@ import mygame.models.Obstacle;
  *
  * @author hayashi & Ferdian
  */
-public class MainMenuState extends SagutAppState {
+public class MainMenuState extends SagutAppState  {
 
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
@@ -106,6 +107,9 @@ public class MainMenuState extends SagutAppState {
         while (obit.hasNext()) {
              Obstacle o = obit.next();
              o.move(tpf);
+             if(o.getX()<-20){
+                 o.regenerate();
+             }
           if(character.collideWith(o.getWorldBound(), res)!=0){
                System.out.println("Collide");
            }

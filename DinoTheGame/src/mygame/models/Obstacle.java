@@ -7,6 +7,7 @@ package mygame.models;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Spatial;
+import java.util.Random;
 
 /**
  *
@@ -24,7 +25,10 @@ public class Obstacle extends PlainObject{
         controlUpdate(tpf);
     }
     public void regenerate(){
-        //TODO : Implemented this later on
+      Random rand = new Random();
+      int nextPosition = rand.nextInt(3)-1;
+      this.setZ((float)2.1*nextPosition);
+      this.setX(50);
     }
     
 }
