@@ -26,12 +26,11 @@ import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.Obstacle;
 
-
 /**
  *
  * @author hayashi & Ferdian
  */
-public class MainMenuState extends SagutAppState  {
+public class MainMenuState extends SagutAppState {
 
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
@@ -53,10 +52,10 @@ public class MainMenuState extends SagutAppState  {
         this.flycamera.setEnabled(false);
         //-----------------------------
         //Load all Model Character
-   
+
         Material mainMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         character = new GameCharacter(10, 10, 0, 0, 0, 0, "PlayerTest", 1, 1, assetManager, null, mainMaterial, 2, 0);
-        
+
         //------------------------------
         //Set Character Control for Player (character)
         BoundingBox bb = (BoundingBox) character.getSpatial().getWorldBound();
@@ -70,20 +69,23 @@ public class MainMenuState extends SagutAppState  {
         for (int i = 0; i < 2; i++) {
             Node n = new Node();
             n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
-            Spatial s =n.getChild("Lantai");
+            Spatial s = n.getChild("Lantai");
             Floor f = new Floor(s, -20, 0, 0);
             Vector3f vector = s.getLocalScale();
-            f.setX(vector.x*i);
+            f.setX(vector.x * i);
             localRootNode.attachChild(s);
             poolFloor.add(f);
-            
+
         }
-        Node n = new Node();
-        n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
-        Spatial s = n.getChild("Obstacle");
-        localRootNode.attachChild(s);
-        System.out.println(poolFloor.size());
-        poolObstacle.add(new Obstacle(localRootNode.getChild("Obstacle"),-20,0,0));
+        for (int i = 0; i < 2; i++) {
+            Node n = new Node();
+            n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
+            Spatial s = n.getChild("Obstacle");
+            localRootNode.attachChild(s);
+            Obstacle o = new Obstacle(s, -20, 0, 0);
+            o.setX(50+50*i);
+            poolObstacle.add(o);
+        }
         //------------------------------
 
         //---------- bullet appstate controller in here
@@ -100,29 +102,29 @@ public class MainMenuState extends SagutAppState  {
 
     @Override
     public void update(float tpf) {
-    
+
         Vector3f v2 = character.getLocalTranslation();
         Iterator<Obstacle> obit = poolObstacle.iterator();
         CollisionResults res = new CollisionResults();
         while (obit.hasNext()) {
-             Obstacle o = obit.next();
-             o.move(tpf);
-             if(o.getX()<-20){
-                 o.regenerate();
-             }
-          if(character.collideWith(o.getWorldBound(), res)!=0){
-               System.out.println("Collide");
-           }
-           
-       }
+            Obstacle o = obit.next();
+            o.move(tpf);
+            if (o.getX() < -20) {
+                o.regenerate();
+            }
+            if (character.collideWith(o.getWorldBound(), res) != 0) {
+                System.out.println("Collide");
+            }
+
+        }
 
         Iterator<Floor> it = poolFloor.iterator();
 
         while (it.hasNext()) {
             Floor f = it.next();
             f.move(tpf);
-            if(f.getX()<-110){
-                f.setX(f.getX()+200);
+            if (f.getX() < -110) {
+                f.setX(f.getX() + 200);
             }
         }
     }

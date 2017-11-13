@@ -11,7 +11,7 @@ import java.util.Random;
 
 /**
  *
- * @author Ferdian
+ * @author FerdianString
  */
 public class Obstacle extends PlainObject{
     
@@ -28,7 +28,7 @@ public class Obstacle extends PlainObject{
       Random rand = new Random();
       int nextPosition = rand.nextInt(3)-1;
       this.setZ((float)2.1*nextPosition);
-      this.setX(50);
+      this.setX(100);
     }
     
 }
