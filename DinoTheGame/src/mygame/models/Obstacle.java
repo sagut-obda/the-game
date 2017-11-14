@@ -26,8 +26,8 @@ public class Obstacle extends PlainObject{
     }
     public void regenerate(){
       Random rand = new Random();
-      int nextPosition = rand.nextInt(3)-1;
-      this.setZ((float)2.1*nextPosition);
+      int nextPosition = rand.nextInt(3);
+      this.setZ((float)(-2.1*nextPosition-1));
       this.setX(50);
     }
     
