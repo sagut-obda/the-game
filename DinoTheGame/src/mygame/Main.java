@@ -3,6 +3,7 @@ package mygame;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
+import com.jme3.audio.AudioNode;
 import mygame.state.MainMenuState;
 
 
@@ -29,11 +30,16 @@ public class Main extends SimpleApplication {
         apset.setTitle("Run Ai");
         app.setShowSettings(false);
         app.setSettings(apset);
+        
     }
 
     @Override
     public void simpleInitApp() {
         stateManager.attach(new MainMenuState(this));
+        AudioNode boom = new AudioNode(assetManager, "Sound/finalv3.ogg");
+        boom.setPositional(false);
+        boom.setDirectional(false);
+        boom.play();
     }
 
     @Override
