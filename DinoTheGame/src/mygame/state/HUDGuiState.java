@@ -10,8 +10,10 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -22,6 +24,11 @@ public class HUDGuiState extends SagutAppState implements ScreenController {
     private Nifty nifty;
     protected static HUDGuiState hud;
     protected NiftyJmeDisplay niftyDisplay;
+    protected TextRenderer lblScore;
+    protected long scoreTotal;
+    protected Task<Void> tskScoreUpdater;
+    protected Thread thdScore;
+    protected boolean stopRequested;
 
     public static HUDGuiState getCurrentInstance() {
         return hud;
@@ -30,6 +37,8 @@ public class HUDGuiState extends SagutAppState implements ScreenController {
     public HUDGuiState(SimpleApplication sapp, String rootNodeName) {
         super(sapp, rootNodeName);
         hud = this;
+        stopRequested = false;
+        scoreTotal = 0;
     }
 
     @Override
@@ -40,6 +49,32 @@ public class HUDGuiState extends SagutAppState implements ScreenController {
 
         nifty.fromXml("Interface/guiHUD.xml", "HUDGameScreen", this);
         sapp.getGuiViewPort().addProcessor(niftyDisplay);
+
+        lblScore = nifty.getScreen("HUDGameScreen").findElementById("lblScore").getRenderer(TextRenderer.class);
+    }
+
+    public void updateScore() {
+        updateScore((scoreTotal + 4));
+    }
+
+    public void updateScore(long score) {
+        scoreTotal = score;
+        if (lblScore != null) {
+            lblScore.setText(String.valueOf(scoreTotal));
+        }
+    }
+
+    // Debouncer Rate = 0.04s for an update score to be fired.
+    protected double scoreDebouncerRate = 0.04;
+    private double debouncerTemp = 0;
+
+    @Override
+    public void update(float tpf) {
+        debouncerTemp += tpf;
+        if (debouncerTemp >= scoreDebouncerRate) {
+            debouncerTemp = 0;
+            updateScore();
+        }
     }
 
     @Override

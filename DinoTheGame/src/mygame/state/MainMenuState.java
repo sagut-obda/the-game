@@ -35,7 +35,7 @@ public class MainMenuState extends SagutAppState  {
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
-
+    
     public MainMenuState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
     }
@@ -127,5 +127,6 @@ public class MainMenuState extends SagutAppState  {
                 f.setX(f.getX()+200);
             }
         }
+        
     }
 }
