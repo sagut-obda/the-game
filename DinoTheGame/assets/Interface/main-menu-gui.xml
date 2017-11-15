@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <screen id="scrMainMenu" controller="mygame.state.MainMenuGuiState">
+        <layer id="GLayer0" childLayout="center">
+            <panel id="GPanel0" childLayout="vertical" backgroundColor="#333333ff" width="50%" x="723" y="76" style="nifty-panel-simple" valign="center" align="right" height="70%">
+                <control name="label" id="GLabel1" width="80%" x="30" y="25" valign="top" text="Dino the Game" align="center" height="26px" font="aurulent-sans-20.fnt"/>
+                <control name="button" id="btnStart" childLayout="center" width="80%" valign="top" label="Start" align="center">
+                    <interact onClick="btnStart_Click()"/>
+                </control>
+                <control name="button" id="btnExit" childLayout="center" width="80%" valign="top" label="Exit" align="center">
+                    <interact onClick="btnExit_Click()"/>
+                </control>
+            </panel>
+        </layer>
+    </screen>
+</nifty>
