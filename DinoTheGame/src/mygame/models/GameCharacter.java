@@ -5,6 +5,9 @@
  */
 package mygame.models;
 
+import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
+import com.jme3.animation.LoopMode;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
@@ -27,6 +30,8 @@ public class GameCharacter extends PlainObject {
     private CharacterControl thisControl;
     private Camera camera;
     private boolean toLeft = false, toRight = false;
+    private AnimChannel channel;
+    private AnimControl control;
 
     public GameCharacter(float x, float y, float z, float vy, float vx, float vz, String nameObject, float height, float width, AssetManager assetManager, Texture texture, Material material, int type, float length, InputManager inputManager) {
         super(x, y, z, vy, vx, vz, nameObject, height, width, assetManager, texture, material, type, length);
@@ -34,14 +39,28 @@ public class GameCharacter extends PlainObject {
         this.inputManager = inputManager;
     }
 
+    public GameCharacter(AssetManager assetManager, String name, String path) {
+        super(assetManager, name, path);
+        control =this.spatial.getControl(AnimControl.class);
+        System.out.println(control==null);
+        channel= control.createChannel();
+        channel.setAnim("stand");
+    }
+
     public void changeColor(ColorRGBA c) {
         material.setColor("Color", c);
         this.spatial.setMaterial(material);
     }
 
+    public void setInputManager(InputManager inputManager) {
+        this.inputManager = inputManager;
+    }
+
     public void move() {
+        channel.setAnim("walk",0.5f);
+        channel.setLoopMode(LoopMode.Loop);
         // System.out.println(toLeft+" "+toRight);
-       // System.out.println(this.z);
+        // System.out.println(this.z);
         if (!(this.z >= -5.1 && this.z <= -1)) {
             thisControl.setWalkDirection(Vector3f.ZERO);
 //            if(thisControl.getPhysicsLocation().z<=-5){
