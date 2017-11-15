@@ -85,13 +85,19 @@ public class MainMenuState extends SagutAppState {
             poolFloor.add(f);
 
         }
-        Node n = new Node();
-        n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
-        Spatial s = n.getChild("Obstacle");
-        localRootNode.attachChild(s);
-        poolObstacle.add(new Obstacle(localRootNode.getChild("Obstacle"), -20, 0, 0));
+        Spatial ss = new Node();
+        for (int i = 0; i < 2; i++) {
+            Node n = new Node();
+            n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
+            Spatial s = n.getChild("Obstacle");
+            localRootNode.attachChild(s);
+            Obstacle o = new Obstacle(s, -20, 0, 0);
+            o.setX(50 + 50 * i);
+            poolObstacle.add(o);
+            ss = n.getChild("Lantai");
+        }
         //------------------------------
-        Spatial ss = n.getChild("Lantai");
+        
         //---------- bullet appstate controller in here
         bulletappstate.getPhysicsSpace().add(ss.getControl(RigidBodyControl.class));
         bulletappstate.getPhysicsSpace().add(characterControl);
