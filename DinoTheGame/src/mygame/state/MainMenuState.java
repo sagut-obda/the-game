@@ -9,7 +9,6 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bounding.BoundingBox;
-import com.jme3.bounding.BoundingSphere;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -21,11 +20,11 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 import mygame.KeyBindings;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
@@ -74,7 +73,7 @@ public class MainMenuState extends SagutAppState {
         //-----------------------------------------------------
         //Attach to the localRoot and add all items to Pooling Structure data
         localRootNode.attachChild(character.getSpatial());
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             Node n = new Node();
             n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
             Spatial s = n.getChild("Lantai");
@@ -92,11 +91,12 @@ public class MainMenuState extends SagutAppState {
             Spatial s = assetManager.loadModel("Models/tree/tree.j3o");
             BoundingBox bb1 = (BoundingBox) s.getWorldBound();
             bb1.setXExtent(bb1.getXExtent() - 0.5f);
-            bb1.setYExtent(bb1.getYExtent() - 0.5f);
+            bb1.setYExtent(bb1.getYExtent() + 50f);
             bb1.setZExtent(bb1.getZExtent() - 0.5f);
             s.setModelBound(bb1);
             localRootNode.attachChild(s);
             Obstacle o = new Obstacle(s, -20, 0, 0);
+            o.setAsset(assetManager);
             o.setX(50 + 50 * i);
             o.setZ(-1);
             poolObstacle.add(o);
@@ -163,12 +163,13 @@ public class MainMenuState extends SagutAppState {
             Obstacle o = obit.next();
             o.move(tpf);
             if (o.getX() < -20) {
+                localRootNode.detachChild(o.getSpatial());
                 o.regenerate();
+                localRootNode.attachChild(o.getSpatial());
             }
             int x = character.collideWith(o.getWorldBound(), res);
             if (x != 0) {
-                BoundingBox bb = (BoundingBox)o.getWorldBound();
-                System.out.println("Collide" + x);
+                
             }
 
         }
