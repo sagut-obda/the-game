@@ -104,14 +104,22 @@ public class MainMenuState extends SagutAppState {
 
         Spatial s = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("World");
         Spatial y = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Edges");
+        Spatial zz = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Stone");
         Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         m.setTexture("ColorMap", assetManager.loadTexture("Models/watertexture.jpg"));
         s.setMaterial(m);
         Material z = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         z.setTexture("ColorMap", assetManager.loadTexture("Models/assetMatahari.jpg"));
         y.setMaterial(z);
+        Material zz1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        zz1.setTexture("ColorMap", assetManager.loadTexture("Models/stoneasset.jpg"));
+        zz.setMaterial(zz1);
+        Spatial zz2 =zz.clone();
+        zz2.setLocalTranslation(0, -0.5f, -7);
         localRootNode.attachChild(s);
         localRootNode.attachChild(y);
+        localRootNode.attachChild(zz);
+        localRootNode.attachChild(zz2);
         //------------------------------
         //---------- bullet appstate controller in here
         bulletappstate.getPhysicsSpace().add(localRootNode.getChild("World").getControl(RigidBodyControl.class));
@@ -169,7 +177,7 @@ public class MainMenuState extends SagutAppState {
             }
             int x = character.collideWith(o.getWorldBound(), res);
             if (x != 0) {
-                
+
             }
 
         }
