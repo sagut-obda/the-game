@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+    <screen id="GScreen0" controller="mygame.Main">
+        <layer id="GLayer0" childLayout="absolute">
+            <control name="button" id="GButton3" childLayout="center" x="31" y="23" label="GButton3"/>
+        </layer>
+    </screen>
+</nifty>
