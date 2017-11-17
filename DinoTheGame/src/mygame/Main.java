@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import mygame.state.MainMenuState;
@@ -32,11 +33,20 @@ public class Main extends SimpleApplication {
         app.setShowSettings(false);
         app.setSettings(apset);
     }
-
+    
+    private AppState activeScreen;
+    
+    private void switchState(AppState nextState) {
+        if(activeScreen != null)
+            stateManager.detach(activeScreen);
+        activeScreen = nextState;
+        stateManager.attach(activeScreen);
+    }
+    
     @Override
     public void simpleInitApp() {
         // This will load the main menu first, as a loader.
-        stateManager.attach(new MainMenuScreenState(this));
+        this.triggerMainMenu();
     }
 
     @Override
@@ -46,6 +56,18 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm) {
-
+        
+    }
+    
+    public void triggerStartGame() {
+        switchState(new MainMenuState(this));
+    }
+    
+    public void triggerMainMenu() {
+        switchState(new MainMenuScreenState(this));
+    }
+    
+    public void triggerEndingScreen() {
+        
     }
 }

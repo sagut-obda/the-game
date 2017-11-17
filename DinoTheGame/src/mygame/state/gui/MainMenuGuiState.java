@@ -8,9 +8,7 @@ package mygame.state.gui;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import de.lessvoid.nifty.NiftyEvent;
-import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import mygame.Main;
 import mygame.state.SagutGuiState;
 
 /**
@@ -43,6 +41,6 @@ public class MainMenuGuiState extends SagutGuiState {
     }
     
     public void btnStart_Click() {
-        // do start game here.
+        ((Main)sapp).triggerStartGame();
     }
 }
