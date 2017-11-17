@@ -42,10 +42,10 @@ public abstract class SagutAppState extends BaseAppState {
         this.sapp = sapp;
         this.localRootNode = new Node(rootNodeName);
         this.rootNode =sapp.getRootNode();
-        flycamera = sapp.getFlyByCamera();
+        this.flycamera = sapp.getFlyByCamera();
         this.assetManager = sapp.getAssetManager();
-        camera= sapp.getCamera();
-        inputManager = sapp.getInputManager();
+        this.camera= sapp.getCamera();
+        this.inputManager = sapp.getInputManager();
         
     }
     

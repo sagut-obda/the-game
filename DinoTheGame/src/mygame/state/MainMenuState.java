@@ -21,7 +21,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javafx.scene.control.Label;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.Obstacle;
@@ -36,7 +35,7 @@ public class MainMenuState extends SagutAppState  {
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
-
+    
     public MainMenuState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
     }
@@ -95,6 +94,9 @@ public class MainMenuState extends SagutAppState  {
         chaseCamera.setDefaultHorizontalRotation(-3.2f);
         chaseCamera.setDefaultVerticalRotation(0.3f);
         //----------------------------------
+        
+        // Add HUD
+        stateManager.attach(new HUDGuiState(sapp, "HUD"));
 
     }
 
@@ -125,5 +127,6 @@ public class MainMenuState extends SagutAppState  {
                 f.setX(f.getX()+200);
             }
         }
+        
     }
 }
