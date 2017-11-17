@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingSphere;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -20,6 +21,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.util.Iterator;
@@ -38,7 +40,6 @@ public class MainMenuState extends SagutAppState {
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
-    private final Vector3f walkDirection = Vector3f.ZERO;
 
     public MainMenuState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
@@ -53,7 +54,7 @@ public class MainMenuState extends SagutAppState {
         poolObstacle = new LinkedList<>();
         //----------------------------
         //Initiate Control Mode 
-        this.bulletappstate.setDebugEnabled(true);
+        this.bulletappstate.setDebugEnabled(false);
         this.flycamera.setEnabled(false);
         //-----------------------------
         //Load all Model Character
@@ -62,22 +63,24 @@ public class MainMenuState extends SagutAppState {
         character.setInputManager(app.getInputManager());
         //------------------------------
         //Set Character Control for Player (character)
-        BoundingBox bb = (BoundingBox) character.getSpatial().getWorldBound();
-        CapsuleCollisionShape ccs = new CapsuleCollisionShape(bb.getXExtent(), bb.getYExtent() + 1.2f);
+        BoundingBox bb = (BoundingBox) character.getWorldBound();
+        CapsuleCollisionShape ccs = new CapsuleCollisionShape(bb.getXExtent(), bb.getYExtent());
         characterControl = new CharacterControl(ccs, 1f);
         characterControl.setJumpSpeed(20);
         characterControl.setFallSpeed(25);
         characterControl.setGravity(30);
         character.setControl(characterControl, camera);
         characterControl.setPhysicsLocation(new Vector3f(10, 2, -1));
-
         //-----------------------------------------------------
         //Attach to the localRoot and add all items to Pooling Structure data
         localRootNode.attachChild(character.getSpatial());
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 6; i++) {
             Node n = new Node();
             n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
             Spatial s = n.getChild("Lantai");
+            Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            m.setTexture("ColorMap", assetManager.loadTexture("Models/asset-Grass.jpg"));
+            s.setMaterial(m);
             Floor f = new Floor(s, -20, 0, 0);
             Vector3f vector = s.getLocalScale();
             f.setX(vector.x * i);
@@ -85,27 +88,39 @@ public class MainMenuState extends SagutAppState {
             poolFloor.add(f);
 
         }
-        Spatial ss = new Node();
         for (int i = 0; i < 2; i++) {
-            Node n = new Node();
-            n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
-            Spatial s = n.getChild("Obstacle");
+            Spatial s = assetManager.loadModel("Models/tree/tree.j3o");
+            BoundingBox bb1 = (BoundingBox) s.getWorldBound();
+            bb1.setXExtent(bb1.getXExtent() - 0.5f);
+            bb1.setYExtent(bb1.getYExtent() - 0.5f);
+            bb1.setZExtent(bb1.getZExtent() - 0.5f);
+            s.setModelBound(bb1);
             localRootNode.attachChild(s);
             Obstacle o = new Obstacle(s, -20, 0, 0);
             o.setX(50 + 50 * i);
+            o.setZ(-1);
             poolObstacle.add(o);
-            ss = n.getChild("Lantai");
         }
+
+        Spatial s = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("World");
+        Spatial y = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Edges");
+        Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        m.setTexture("ColorMap", assetManager.loadTexture("Models/watertexture.jpg"));
+        s.setMaterial(m);
+        Material z = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        z.setTexture("ColorMap", assetManager.loadTexture("Models/assetMatahari.jpg"));
+        y.setMaterial(z);
+        localRootNode.attachChild(s);
+        localRootNode.attachChild(y);
         //------------------------------
-        
         //---------- bullet appstate controller in here
-        bulletappstate.getPhysicsSpace().add(ss.getControl(RigidBodyControl.class));
+        bulletappstate.getPhysicsSpace().add(localRootNode.getChild("World").getControl(RigidBodyControl.class));
         bulletappstate.getPhysicsSpace().add(characterControl);
         //------------------------------------
         //Last for all ~fiuh , set the camera 
         chaseCamera = new ChaseCamera(camera, character.getSpatial(), inputManager);
         chaseCamera.setDefaultHorizontalRotation(-3.2f);
-        chaseCamera.setDefaultVerticalRotation(0.3f);
+        chaseCamera.setDefaultVerticalRotation(0.2f);
         //----------------------------------
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-10, 2, -1).normalizeLocal());
@@ -115,7 +130,6 @@ public class MainMenuState extends SagutAppState {
         sunBlakang.setDirection(new Vector3f(10, 2, -1).normalizeLocal());
         sunBlakang.setColor(ColorRGBA.White);
         rootNode.addLight(sunBlakang);
-
     }
 
     private void initKeys() {
@@ -124,15 +138,14 @@ public class MainMenuState extends SagutAppState {
         inputManager.addMapping("Right", new KeyTrigger(k.GO_RIGHT));
         inputManager.addMapping("Jump", new KeyTrigger(k.JUMP));
         inputManager.addListener(actionListener, "Left", "Right", "Jump");
+
     }
-    private final ActionListener actionListener = new ActionListener() {
+    private ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             if (name.equals("Left")) {
-                left = isPressed;
                 character.isLeft(isPressed);
             } else if (name.equals("Right")) {
-                right = isPressed;
                 character.isRight(isPressed);
             } else if (name.equals("Jump")) {
                 character.jump();
@@ -140,23 +153,22 @@ public class MainMenuState extends SagutAppState {
         }
 
     };
-    private boolean left, right;
-    private int state = -1;
 
     @Override
     public void update(float tpf) {
         character.move();
         Iterator<Obstacle> obit = poolObstacle.iterator();
         CollisionResults res = new CollisionResults();
-        //character.move(tpf);
         while (obit.hasNext()) {
             Obstacle o = obit.next();
             o.move(tpf);
             if (o.getX() < -20) {
                 o.regenerate();
             }
-            if (character.collideWith(o.getWorldBound(), res) != 0) {
-                System.out.println("Collide");
+            int x = character.collideWith(o.getWorldBound(), res);
+            if (x != 0) {
+                BoundingBox bb = (BoundingBox)o.getWorldBound();
+                System.out.println("Collide" + x);
             }
 
         }

@@ -34,8 +34,8 @@ public class Floor extends PlainObject {
 
     public void move(float tpf) {
         controlUpdate(tpf);
-        if (this.getX() < -110) {
-            this.setX(this.getX() + 200);
+        if (this.getX() < -100) {
+            this.setX(this.getX() + 300);
         }
     }
 

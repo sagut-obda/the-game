@@ -28,7 +28,7 @@ public class Obstacle extends PlainObject{
       Random rand = new Random();
       int nextPosition = rand.nextInt(3);
       this.setZ((float)(-2.1*nextPosition-1));
-      this.setX(50);
+      this.setX(100);
     }
     
 }
