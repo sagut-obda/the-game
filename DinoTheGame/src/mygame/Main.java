@@ -4,7 +4,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import mygame.state.MainMenuState;
-
+import mygame.state.screen.MainMenuScreenState;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -18,6 +18,8 @@ public class Main extends SimpleApplication {
 
     public static void main(String[] args) {
         Main app = new Main();
+        app.setDisplayFps(false);
+        app.setDisplayStatView(false);
         if (quickDevelopmentMode) {
             configForQuickDevelopmentMode(app);
         }
@@ -33,16 +35,17 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        stateManager.attach(new MainMenuState(this));
+        // This will load the main menu first, as a loader.
+        stateManager.attach(new MainMenuScreenState(this));
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
+
     }
 }

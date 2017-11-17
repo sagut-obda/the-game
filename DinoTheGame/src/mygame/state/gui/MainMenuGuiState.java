@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame.state;
+package mygame.state.gui;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.niftygui.NiftyJmeDisplay;
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.NiftyEvent;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import mygame.state.SagutGuiState;
 
 /**
  *
@@ -19,7 +19,11 @@ import de.lessvoid.nifty.screen.ScreenController;
  */
 public class MainMenuGuiState extends SagutGuiState {
     protected static MainMenuGuiState hud;
-
+    
+    public MainMenuGuiState(SimpleApplication sapp){
+        super(sapp, "MainMenuGUI");
+    }
+    
     public static MainMenuGuiState getCurrentInstance() {
         return hud;
     }
@@ -32,5 +36,13 @@ public class MainMenuGuiState extends SagutGuiState {
     @Override
     protected void init(AppStateManager stateManager, Application app) {
         nifty.fromXml("Interface/main-menu-gui.xml", "scrMainMenu", this);
+    }
+    
+    public void btnExit_Click() {
+        sapp.stop();
+    }
+    
+    public void btnStart_Click() {
+        // do start game here.
     }
 }
