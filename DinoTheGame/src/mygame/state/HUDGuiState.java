@@ -19,11 +19,9 @@ import javafx.concurrent.Task;
  *
  * @author Hayashi
  */
-public class HUDGuiState extends SagutAppState implements ScreenController {
+public class HUDGuiState extends SagutGuiState {
 
-    private Nifty nifty;
     protected static HUDGuiState hud;
-    protected NiftyJmeDisplay niftyDisplay;
     protected TextRenderer lblScore;
     protected long scoreTotal;
     protected Task<Void> tskScoreUpdater;
@@ -43,18 +41,16 @@ public class HUDGuiState extends SagutAppState implements ScreenController {
 
     @Override
     protected void init(AppStateManager stateManager, Application app) {
-        niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
-                sapp.getAssetManager(), sapp.getInputManager(), sapp.getAudioRenderer(), sapp.getGuiViewPort());
-        nifty = niftyDisplay.getNifty();
-
         nifty.fromXml("Interface/guiHUD.xml", "HUDGameScreen", this);
-        sapp.getGuiViewPort().addProcessor(niftyDisplay);
-
-        lblScore = nifty.getScreen("HUDGameScreen").findElementById("lblScore").getRenderer(TextRenderer.class);
+        lblScore = nifty.getScreen("HUDGameScreen")
+                .findElementById("lblScore")
+                .getRenderer(TextRenderer.class);
     }
-
+    
+    protected int pointPerTicks = 4;
+    
     public void updateScore() {
-        updateScore((scoreTotal + 4));
+        updateScore(scoreTotal + pointPerTicks);
     }
 
     public void updateScore(long score) {
@@ -68,6 +64,28 @@ public class HUDGuiState extends SagutAppState implements ScreenController {
     protected double scoreDebouncerRate = 0.04;
     private double debouncerTemp = 0;
 
+    /**
+     * Sets the score update ticks. This will add the point to the score in a
+     * second rate.
+     *
+     * Default: 0.04s.
+     *
+     * @param second how long to wait before the score will ticks to update.
+     */
+    public void setScoreTicks(double second) {
+        this.scoreDebouncerRate = second;
+    }
+    
+    /**
+     * Gets the score update ticks.
+     * 
+     * @return how long will the score wait until it added a new point.
+     */
+    public double getScoreTicks(){
+        return this.scoreDebouncerRate;
+    }
+    
+       
     @Override
     public void update(float tpf) {
         debouncerTemp += tpf;
@@ -77,24 +95,17 @@ public class HUDGuiState extends SagutAppState implements ScreenController {
         }
     }
 
-    @Override
-    protected void cleanup(Application app) {
-        sapp.getGuiViewPort().removeProcessor(niftyDisplay);
+    /**
+     * @return the pointPerTicks
+     */
+    public int getPointPerTicks() {
+        return pointPerTicks;
     }
 
-    @Override
-    public void bind(Nifty nifty, Screen screen) {
-
+    /**
+     * @param pointPerTicks the pointPerTicks to set
+     */
+    public void setPointPerTicks(int pointPerTicks) {
+        this.pointPerTicks = pointPerTicks;
     }
-
-    @Override
-    public void onStartScreen() {
-
-    }
-
-    @Override
-    public void onEndScreen() {
-
-    }
-
 }
