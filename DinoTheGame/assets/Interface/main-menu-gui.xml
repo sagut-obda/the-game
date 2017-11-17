@@ -5,7 +5,7 @@
     <screen id="scrMainMenu" controller="mygame.state.MainMenuGuiState">
         <layer id="GLayer0" childLayout="center">
             <panel id="GPanel0" childLayout="vertical" backgroundColor="#333333ff" width="50%" x="723" y="76" style="nifty-panel-simple" valign="center" align="right" height="70%">
-                <control name="label" id="GLabel1" width="80%" x="30" y="25" valign="top" text="Dino the Game" align="center" height="26px" font="aurulent-sans-20.fnt"/>
+                <control name="label" id="GLabel1" width="80%" x="30" y="25" valign="top" text="Dino the Game" align="center" height="26px"/>
                 <control name="button" id="btnStart" childLayout="center" width="80%" valign="top" label="Start" align="center">
                     <interact onClick="btnStart_Click()"/>
                 </control>

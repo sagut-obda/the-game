@@ -17,10 +17,8 @@ import de.lessvoid.nifty.screen.ScreenController;
  *
  * @author Hayashi
  */
-public class MainMenuGuiState extends SagutAppState implements ScreenController {
-    private Nifty nifty;
+public class MainMenuGuiState extends SagutGuiState {
     protected static MainMenuGuiState hud;
-    protected NiftyJmeDisplay niftyDisplay;
 
     public static MainMenuGuiState getCurrentInstance() {
         return hud;
@@ -33,29 +31,6 @@ public class MainMenuGuiState extends SagutAppState implements ScreenController 
 
     @Override
     protected void init(AppStateManager stateManager, Application app) {
-        niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
-                sapp.getAssetManager(), sapp.getInputManager(), sapp.getAudioRenderer(), sapp.getGuiViewPort());
-        nifty = niftyDisplay.getNifty();
-
         nifty.fromXml("Interface/main-menu-gui.xml", "scrMainMenu", this);
-        sapp.getGuiViewPort().addProcessor(niftyDisplay);
     }
-    
-    @Override
-    protected void cleanup(Application app) {
-        sapp.getGuiViewPort().removeProcessor(niftyDisplay);
-    }
-
-    @Override
-    public void bind(Nifty nifty, Screen screen) {
-    }
-
-    @Override
-    public void onStartScreen() {
-    }
-
-    @Override
-    public void onEndScreen() {
-    }
-    
 }
