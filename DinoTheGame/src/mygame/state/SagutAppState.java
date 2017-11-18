@@ -12,6 +12,7 @@ package mygame.state;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.asset.AssetManager;
@@ -40,14 +41,18 @@ public abstract class SagutAppState extends BaseAppState {
     protected ChaseCamera chaseCamera;
     protected Camera camera;
     protected InputManager inputManager;
+    protected AppStateManager stateManager;
 
     public SagutAppState(SimpleApplication sapp, String rootNodeName) {
         this.sapp = sapp;
         this.localRootNode = new Node(rootNodeName);
         this.rootNode = sapp.getRootNode();
         flycamera = sapp.getFlyByCamera();
+        flycamera.setEnabled(false);
+        flycamera.setDragToRotate(false);
         this.assetManager = sapp.getAssetManager();
         camera = sapp.getCamera();
+        stateManager = sapp.getStateManager();
         inputManager = sapp.getInputManager();
     }
 
@@ -55,7 +60,7 @@ public abstract class SagutAppState extends BaseAppState {
     protected void initialize(Application app) {
         bulletappstate = new BulletAppState();
         rootNode.attachChild(localRootNode);
-        this.init(this.getStateManager(), app);
+        this.init(stateManager, app);
     }
 
     protected abstract void init(AppStateManager stateManager, Application app);

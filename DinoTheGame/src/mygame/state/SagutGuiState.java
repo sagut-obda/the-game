@@ -10,6 +10,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.renderer.ViewPort;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -22,6 +23,7 @@ public abstract class SagutGuiState extends SagutAppState implements ScreenContr
     
     protected Nifty nifty; 
     protected NiftyJmeDisplay niftyDisplay;
+    protected ViewPort guiViewPort;
     
     public SagutGuiState(SimpleApplication sapp, String rootNodeName) {
         super(sapp, rootNodeName);
@@ -34,6 +36,7 @@ public abstract class SagutGuiState extends SagutAppState implements ScreenContr
         niftyDisplay = NiftyJmeDisplay.newNiftyJmeDisplay(
                 sapp.getAssetManager(), sapp.getInputManager(), sapp.getAudioRenderer(), sapp.getGuiViewPort());
         nifty = niftyDisplay.getNifty();
+        guiViewPort = app.getGuiViewPort();
         this.init(this.getStateManager(), app);
         sapp.getGuiViewPort().addProcessor(niftyDisplay);
     }
