@@ -37,7 +37,6 @@ public abstract class SagutAppState extends BaseAppState {
     protected final AssetManager assetManager;
     protected FlyByCamera flycamera;
     protected BulletAppState bulletappstate;
-    protected CharacterControl characterControl;
     protected ChaseCamera chaseCamera;
     protected Camera camera;
     protected InputManager inputManager;

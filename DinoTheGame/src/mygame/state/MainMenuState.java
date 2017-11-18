@@ -9,9 +9,6 @@ import com.jme3.app.Application;
 import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.bounding.BoundingBox;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.ChaseCamera;
@@ -23,12 +20,14 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.texture.Texture;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Random;
+import mygame.GameUtilities;
 import mygame.KeyBindings;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
+import mygame.models.ObjectUtilites;
 import mygame.models.Obstacle;
 import mygame.state.gui.HUDGuiState;
 
@@ -46,7 +45,11 @@ public class MainMenuState extends SagutAppState {
         super(sapp, "Main Menu");
         initKeys();
     }
-
+    /**
+     * the method that build up the scenario of games
+     * @param stateManager : the state manager
+     * @param app :the app
+     */
     @Override
     public void init(AppStateManager stateManager, Application app) {
         stateManager.attach(this.bulletappstate);
@@ -56,77 +59,51 @@ public class MainMenuState extends SagutAppState {
         stateManager.detach(stateManager.getState(FlyCamAppState.class));
         //----------------------------
         //Initiate Control Mode 
-        this.bulletappstate.setDebugEnabled(false);
+        this.bulletappstate.setDebugEnabled(true);
         this.flycamera.setEnabled(false);
         //-----------------------------
         //Load all Model Character
 
-        character = new GameCharacter(assetManager, "Kizuna Ai", "Models/kizuna/kizuna.j3o");
+        character = new GameCharacter(GameUtilities.getInstance().getAssetManager(), "Kizuna Ai", "Models/kizuna/kizuna.j3o");
         character.setInputManager(app.getInputManager());
         //------------------------------
         //Set Character Control for Player (character)
-        BoundingBox bb = (BoundingBox) character.getWorldBound();
-        CapsuleCollisionShape ccs = new CapsuleCollisionShape(bb.getXExtent(), bb.getYExtent());
-        characterControl = new CharacterControl(ccs, 1f);
-        characterControl.setJumpSpeed(20);
-        characterControl.setFallSpeed(25);
-        characterControl.setGravity(30);
-        character.setControl(characterControl, camera);
-        characterControl.setPhysicsLocation(new Vector3f(10, 2, -1));
+        character.createControl();
+        character.setCamera(camera);
+        character.setLocation(10, 2, -1);
+        character.addAndCreateAnimation("kizunaai_mesh");
+        character.setAnimation("Walk");
         //-----------------------------------------------------
         //Attach to the localRoot and add all items to Pooling Structure data
         localRootNode.attachChild(character.getSpatial());
-        for (int i = 0; i < 5; i++) {
-            Node n = new Node();
-            n.attachChild(assetManager.loadModel("Scenes/LandmarkScene.j3o"));
-            Spatial s = n.getChild("Lantai");
+        for (int i = 0; i < GameUtilities.getInstance().getManyFloor(); i++) {
+            Floor f = new Floor(((Node) assetManager.loadModel("Scenes/LandmarkScene.j3o")).getChild("Lantai"), -20, 0, 0);
             Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            m.setTexture("ColorMap", assetManager.loadTexture("Models/asset-Grass.jpg"));
-            s.setMaterial(m);
-            Floor f = new Floor(s, -20, 0, 0);
-            Vector3f vector = s.getLocalScale();
-            f.setX(vector.x * i);
-            localRootNode.attachChild(s);
+            Texture t = assetManager.loadTexture("Models/asset-Grass.jpg");
+            f.setMaterialTexture(m, t);
+            f.setX(f.getSpatial().getLocalScale().x * i);
+            localRootNode.attachChild(f.getSpatial());
             poolFloor.add(f);
-
         }
-        for (int i = 0; i < 2; i++) {
-            Spatial s = assetManager.loadModel("Models/tree/tree.j3o");
-            BoundingBox bb1 = (BoundingBox) s.getWorldBound();
-            bb1.setXExtent(bb1.getXExtent() - 0.5f);
-            bb1.setYExtent(bb1.getYExtent() + 50f);
-            bb1.setZExtent(bb1.getZExtent() - 0.5f);
-            s.setModelBound(bb1);
-            localRootNode.attachChild(s);
-            Obstacle o = new Obstacle(s, -20, 0, 0);
-            o.setAsset(assetManager);
+        
+        for (int i = 0; i < GameUtilities.getInstance().getManyObstacle(); i++) {
+            Spatial tree = assetManager.loadModel("Models/tree/tree.j3o").clone();
+            Obstacle o = new Obstacle(tree, -20, 0, 0);
+            o.setValueOfHitBox(0.00001f, 50, 0.00001f);
             o.setX(150 + 50 * i);
             o.setZ(-1);
             poolObstacle.add(o);
+            localRootNode.attachChild(o.getSpatial());
         }
-
-        Spatial s = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("World");
-        Spatial y = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Edges");
-        Spatial zz = ((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Stone");
-        Material m = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        m.setTexture("ColorMap", assetManager.loadTexture("Models/watertexture.jpg"));
-        s.setMaterial(m);
-        Material z = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        z.setTexture("ColorMap", assetManager.loadTexture("Models/assetMatahari.jpg"));
-        y.setMaterial(z);
-        Material zz1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        zz1.setTexture("ColorMap", assetManager.loadTexture("Models/stoneasset.jpg"));
-        zz.setMaterial(zz1);
-        Spatial zz2 = zz.clone();
-        zz2.setLocalTranslation(0, -0.5f, -7);
-        localRootNode.attachChild(s);
-        localRootNode.attachChild(y);
-        localRootNode.attachChild(zz);
-        localRootNode.attachChild(zz2);
+        addDecorate();
         //------------------------------
         //---------- bullet appstate controller in here
         bulletappstate.getPhysicsSpace().add(localRootNode.getChild("World").getControl(RigidBodyControl.class));
-        bulletappstate.getPhysicsSpace().add(characterControl);
+        try {
+            bulletappstate.getPhysicsSpace().add(character.getControl());
+        } catch (Exception ex) {
+
+        }
         //------------------------------------
         //Last for all ~fiuh , set the camera 
         chaseCamera = new ChaseCamera(camera, character.getSpatial(), inputManager);
@@ -145,7 +122,9 @@ public class MainMenuState extends SagutAppState {
         // Add HUD
         stateManager.attach(new HUDGuiState(sapp, "HUD"));
     }
-
+    /**
+     * initialize the keys for player can play it
+     */
     private void initKeys() {
         KeyBindings k = new KeyBindings();
         inputManager.addMapping("Left", new KeyTrigger(k.GO_LEFT));
@@ -153,6 +132,20 @@ public class MainMenuState extends SagutAppState {
         inputManager.addMapping("Jump", new KeyTrigger(k.JUMP));
         inputManager.addListener(actionListener, "Left", "Right", "Jump");
 
+    }
+    /**
+     * method for add decorate such as water , the sun , and stone
+     */
+    private void addDecorate() {
+        ObjectUtilites iniAir = new ObjectUtilites(((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("World"), assetManager.loadTexture("Models/watertexture.jpg"));
+        ObjectUtilites iniBatuKiri = new ObjectUtilites(((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Stone"), assetManager.loadTexture("Models/stoneasset.jpg"));
+        ObjectUtilites iniBatuKanan = new ObjectUtilites(((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Stone"), assetManager.loadTexture("Models/stoneasset.jpg"));
+        iniBatuKanan.getSpatial().setLocalTranslation(0, -0.5f, -7);
+        ObjectUtilites iniTrump = new ObjectUtilites(((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Edges"), assetManager.loadTexture("Models/assetMatahari.jpg"));
+        localRootNode.attachChild(iniAir.getSpatial());
+        localRootNode.attachChild(iniBatuKiri.getSpatial());
+        localRootNode.attachChild(iniBatuKanan.getSpatial());
+        localRootNode.attachChild(iniTrump.getSpatial());
     }
     private ActionListener actionListener = new ActionListener() {
         @Override
@@ -169,7 +162,10 @@ public class MainMenuState extends SagutAppState {
 
     };
     protected boolean gameOverDebouncer = false;
-
+    /**
+     * main loop for this method
+     * @param tpf : time per frame the constant value that needed for fair play
+     */
     @Override
     public void update(float tpf) {
         character.move();
@@ -184,9 +180,13 @@ public class MainMenuState extends SagutAppState {
                 localRootNode.attachChild(o.getSpatial());
             }
             int x = character.collideWith(o.getWorldBound(), res);
-            if (x != 0 && !gameOverDebouncer) {
+            if (x>30&&!gameOverDebouncer) {
                 gameOverDebouncer = true;
                 HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
+                //reset();
+            }else if(x!=0){
+              //  o.printInfo();
+                System.out.println(x);
             }
 
         }
@@ -196,5 +196,20 @@ public class MainMenuState extends SagutAppState {
             f.move(tpf);
         }
 
+    }
+    /**
+     * method for restart the game
+     */
+    public void reset(){
+        // reset method only reset the obstacle position and score
+        Iterator<Obstacle> it = poolObstacle.iterator();
+        int i = 0;
+        while(it.hasNext()){
+            Obstacle o = it.next();
+            o.setX(150+50*i);
+            i++;
+        }
+        gameOverDebouncer = false ;
+        ((HUDGuiState)stateManager.getState(HUDGuiState.class)).updateScore(0);
     }
 }

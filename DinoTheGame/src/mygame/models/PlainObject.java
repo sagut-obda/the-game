@@ -31,6 +31,8 @@ public class PlainObject extends AbstractControl {
     protected float vy, vx, vz;
     protected String nameObject;
     protected float height, width, length;
+    protected Material material ;
+    protected Texture texture;
 
     public PlainObject(float x, float y, float z, float vy, float vx, float vz, String nameObject, float height, float width, AssetManager assetManager, Texture texture, Material material, int type, float length) {
         this.x = x;
@@ -106,6 +108,10 @@ public class PlainObject extends AbstractControl {
         this.vy = vy;
         this.vx = vx;
         this.vz = vz;
+    }
+    public PlainObject(Spatial spatial,Texture texture){
+        this.spatial = spatial;
+        this.texture =texture;
     }
 
     @Override

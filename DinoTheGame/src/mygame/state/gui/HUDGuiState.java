@@ -8,11 +8,14 @@ package mygame.state.gui;
 import mygame.state.SagutGuiState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import javafx.concurrent.Task;
+import mygame.Main;
 import mygame.models.PlainHighScore;
+import mygame.state.MainMenuState;
 
 /**
  *
@@ -25,8 +28,8 @@ public class HUDGuiState extends SagutGuiState {
     protected TextRenderer lblValueScore;
     protected TextRenderer lblValueHigh;
     protected long scoreTotal;
-    protected Task<Void> tskScoreUpdater;
-    protected Thread thdScore;
+    //protected Task<Void> tskScoreUpdater;
+    //protected Thread thdScore;
     protected boolean stopRequested;
     protected PlainHighScore hs;
 
@@ -56,7 +59,7 @@ public class HUDGuiState extends SagutGuiState {
         
     }
 
-    protected int pointPerTicks = 4;
+    protected int pointPerTicks = 1;
 
     public void updateScore() {
         updateScore(scoreTotal + pointPerTicks);
@@ -70,7 +73,7 @@ public class HUDGuiState extends SagutGuiState {
     }
 
     // Debouncer Rate = 0.04s for an update score to be fired.
-    protected double scoreDebouncerRate = 0.04;
+    protected double scoreDebouncerRate = 0.5f;
     private double debouncerTemp = 0;
     protected boolean isOver = false;
 
@@ -78,7 +81,7 @@ public class HUDGuiState extends SagutGuiState {
      * Sets the score update ticks. This will add the point to the score in a
      * second rate.
      *
-     * Default: 0.04s.
+     * Default: 0.5s.
      *
      * @param second how long to wait before the score will ticks to update.
      */
@@ -127,6 +130,7 @@ public class HUDGuiState extends SagutGuiState {
         lblValueHigh.setText(String.valueOf(hs.getLngHighestScore()));
         lblValueScore.setText(String.valueOf(scoreTotal));
         nifty.gotoScreen("scrGameOver");
+        ((Main)sapp).triggerStartGame();
     }
     
     public void triggerResetScore() {

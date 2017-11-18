@@ -29,6 +29,7 @@ public class Main extends SimpleApplication {
             configForQuickDevelopmentMode(app);
         }
         app.start();
+
     }
 
     public static void configForQuickDevelopmentMode(SimpleApplication app) {
@@ -51,12 +52,13 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        GameUtilities.Initialize(this.getAssetManager());
         this.triggerMainMenu();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        
+
     }
 
     @Override
