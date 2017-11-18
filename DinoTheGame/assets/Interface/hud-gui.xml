@@ -5,7 +5,18 @@
     <screen id="scrHUD" controller="mygame.state.gui.HUDGuiState">
         <layer id="GLayer2" childLayout="center" valign="top" align="right">
             <panel id="GPanel4" childLayout="center" width="50%" x="389" y="8" style="nifty-panel-simple" valign="top" align="right" height="47px">
-                <control name="label" id="lblScore" width="50%" x="197" y="26" valign="center" text="1000" align="right" height="25px" font="aurulent-sans-16.fnt"/>
+                <control name="label" id="lblScore" width="50%" x="197" y="26" valign="center" text="1000" align="right" font="aurulent-sans-16.fnt" height="25px"/>
+            </panel>
+        </layer>
+    </screen>
+    <screen id="scrGameOver">
+        <layer id="GLayer3" childLayout="center" valign="center" align="center">
+            <panel id="GPanel1" childLayout="absolute" visibleToMouse="true" style="nifty-panel-simple" valign="center" align="center" height="200px" width="430px">
+                <control name="label" id="lblMainTitle" width="100px" x="145" y="17" text="Game Over" height="50px" font="aurulent-sans-16.fnt"/>
+                <control name="label" id="lblTitleScore" width="100px" x="43" y="60" text="Your Score:" height="50px" font="aurulent-sans-16.fnt"/>
+                <control name="label" id="lblValueScore" width="100px" x="43" y="100" text="0" height="50px" font="aurulent-sans-16.fnt"/>
+                <control name="label" id="lblTitleHigh" width="100px" x="263" y="60" text="High Score:" height="50px" font="aurulent-sans-16.fnt"/>
+                <control name="label" id="lblValueHigh" width="100px" x="263" y="100" text="0" height="50px" font="aurulent-sans-16.fnt"/>
             </panel>
         </layer>
     </screen>
