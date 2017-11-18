@@ -9,6 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.scene.Spatial;
 import java.util.Random;
+import mygame.GameUtilities;
 
 /**
  *
@@ -32,29 +33,30 @@ public class Obstacle extends PlainObject {
         Random rand = new Random();
         int nextPosition = rand.nextInt(3);
         boolean isLog = rand.nextBoolean();
-        BoundingBox bb = (BoundingBox) this.spatial.getWorldBound();
         if (isLog) {
-            this.spatial = assetManager.loadModel("Models/tree/tree.j3o");
-            bb.setXExtent(0.44597244f);
-            bb.setYExtent(31.001266f);
-            bb.setZExtent(0.44597292f);
+            this.spatial = GameUtilities.getInstance().getAssetManager().loadModel("Models/tree/tree.j3o");
+            BoundingBox bb = (BoundingBox) this.spatial.getWorldBound();
+            bb.setXExtent(0.000001f);
+            bb.setYExtent(40);
+            bb.setZExtent(0.000001f);
             this.spatial.setModelBound(bb);
         } else {
-            this.spatial = assetManager.loadModel("Models/log/log.j3o");
+            this.spatial = GameUtilities.getInstance().getAssetManager().loadModel("Models/log/log.j3o");
             nextPosition = 1;
         }
         this.setZ((float) (-2.1 * nextPosition - 1));
-        this.setX(100);
+        this.setX(200);
     }
 
-    private AssetManager assetManager;
-
-    public void setAsset(AssetManager assetManager) {
-        this.assetManager = assetManager;
+    public void setValueOfHitBox(float x, float y, float z) {
+        BoundingBox bb1 = (BoundingBox) getWorldBound();
+        bb1.setXExtent(x);
+        bb1.setYExtent(y);
+        bb1.setZExtent(z);
+        this.spatial.setModelBound(bb1);
     }
-
-    public void setSpatial(Spatial s) {
-        this.spatial = s;
+    public void printInfo(){
+        System.out.println(this.spatial.getWorldBound().toString());
     }
 
 }

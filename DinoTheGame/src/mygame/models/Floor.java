@@ -28,6 +28,13 @@ public class Floor extends PlainObject {
         super(assetManager, name, path, vx, vy, vz);
     }
 
+    public void setMaterialTexture(Material material, Texture texture) {
+        this.material = material;
+        this.texture = texture;
+        this.material.setTexture("ColorMap", texture);
+        this.spatial.setMaterial(this.material);
+    }
+
     public Floor(Spatial s, float vx, float vy, float vz) {
         super(s, vx, vy, vz);
     }
