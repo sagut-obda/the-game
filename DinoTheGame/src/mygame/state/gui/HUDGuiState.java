@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame.state;
+package mygame.state.gui;
 
+import mygame.state.SagutGuiState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.niftygui.NiftyJmeDisplay;
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.TextRenderer;
-import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 import javafx.concurrent.Task;
 
 /**
@@ -41,7 +38,7 @@ public class HUDGuiState extends SagutGuiState {
 
     @Override
     protected void init(AppStateManager stateManager, Application app) {
-        nifty.fromXml("Interface/guiHUD.xml", "HUDGameScreen", this);
+        nifty.fromXml("Interface/scrHUD.xml", "HUDGameScreen", this);
         lblScore = nifty.getScreen("HUDGameScreen")
                 .findElementById("lblScore")
                 .getRenderer(TextRenderer.class);
