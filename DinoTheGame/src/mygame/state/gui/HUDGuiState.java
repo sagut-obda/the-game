@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame.state;
+package mygame.state.gui;
 
+import mygame.state.SagutGuiState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.niftygui.NiftyJmeDisplay;
-import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 import javafx.concurrent.Task;
+import mygame.models.PlainHighScore;
 
 /**
  *
@@ -23,10 +22,13 @@ public class HUDGuiState extends SagutGuiState {
 
     protected static HUDGuiState hud;
     protected TextRenderer lblScore;
+    protected TextRenderer lblValueScore;
+    protected TextRenderer lblValueHigh;
     protected long scoreTotal;
     protected Task<Void> tskScoreUpdater;
     protected Thread thdScore;
     protected boolean stopRequested;
+    protected PlainHighScore hs;
 
     public static HUDGuiState getCurrentInstance() {
         return hud;
@@ -37,18 +39,25 @@ public class HUDGuiState extends SagutGuiState {
         hud = this;
         stopRequested = false;
         scoreTotal = 0;
+        hs = PlainHighScore.load();
     }
 
     @Override
     protected void init(AppStateManager stateManager, Application app) {
-        nifty.fromXml("Interface/guiHUD.xml", "HUDGameScreen", this);
-        lblScore = nifty.getScreen("HUDGameScreen")
+        nifty.fromXml("Interface/hud-gui.xml", "scrHUD", this);
+        lblScore = nifty.getScreen("scrHUD")
                 .findElementById("lblScore")
                 .getRenderer(TextRenderer.class);
+        Screen scrGameOver = nifty.getScreen("scrGameOver");
+        lblValueHigh = scrGameOver.findElementById("lblValueHigh")
+                .getRenderer(TextRenderer.class);
+        lblValueScore = scrGameOver.findElementById("lblValueScore")
+                .getRenderer(TextRenderer.class);
+        
     }
-    
+
     protected int pointPerTicks = 4;
-    
+
     public void updateScore() {
         updateScore(scoreTotal + pointPerTicks);
     }
@@ -63,6 +72,7 @@ public class HUDGuiState extends SagutGuiState {
     // Debouncer Rate = 0.04s for an update score to be fired.
     protected double scoreDebouncerRate = 0.04;
     private double debouncerTemp = 0;
+    protected boolean isOver = false;
 
     /**
      * Sets the score update ticks. This will add the point to the score in a
@@ -75,23 +85,24 @@ public class HUDGuiState extends SagutGuiState {
     public void setScoreTicks(double second) {
         this.scoreDebouncerRate = second;
     }
-    
+
     /**
      * Gets the score update ticks.
-     * 
+     *
      * @return how long will the score wait until it added a new point.
      */
-    public double getScoreTicks(){
+    public double getScoreTicks() {
         return this.scoreDebouncerRate;
     }
-    
-       
+
     @Override
     public void update(float tpf) {
-        debouncerTemp += tpf;
-        if (debouncerTemp >= scoreDebouncerRate) {
-            debouncerTemp = 0;
-            updateScore();
+        if (!isOver) {
+            debouncerTemp += tpf;
+            if (debouncerTemp >= scoreDebouncerRate) {
+                debouncerTemp = 0;
+                updateScore();
+            }
         }
     }
 
@@ -107,5 +118,20 @@ public class HUDGuiState extends SagutGuiState {
      */
     public void setPointPerTicks(int pointPerTicks) {
         this.pointPerTicks = pointPerTicks;
+    }
+
+    public void triggerShowGameOverScreen() {
+        isOver = true;
+        hs.setLngHighestScore(scoreTotal);
+        hs.save();
+        lblValueHigh.setText(String.valueOf(hs.getLngHighestScore()));
+        lblValueScore.setText(String.valueOf(scoreTotal));
+        nifty.gotoScreen("scrGameOver");
+    }
+    
+    public void triggerResetScore() {
+        updateScore(0);
+        nifty.gotoScreen("scrHUD");
+        isOver = false;
     }
 }
