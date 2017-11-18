@@ -2,9 +2,13 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppState;
+import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mygame.state.MainMenuState;
+import mygame.state.SagutAppState;
 import mygame.state.screen.MainMenuScreenState;
 
 /**
@@ -33,43 +37,42 @@ public class Main extends SimpleApplication {
         app.setShowSettings(false);
         app.setSettings(apset);
     }
-    
+
     private AppState activeScreen;
-    
-    private void switchState(AppState nextState) {
-        if(activeScreen != null){
+
+    private void switchState(SagutAppState nextState) {
+        if (activeScreen != null) {
             activeScreen.setEnabled(false);
             stateManager.detach(activeScreen);
         }
         activeScreen = nextState;
-        stateManager.attach(activeScreen);
+        stateManager.attach(nextState);
     }
-    
+
     @Override
     public void simpleInitApp() {
-        // This will load the main menu first, as a loader.
         this.triggerMainMenu();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-
+        
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        
+
     }
-    
+
     public void triggerStartGame() {
         switchState(new MainMenuState(this));
     }
-    
+
     public void triggerMainMenu() {
         switchState(new MainMenuScreenState(this));
     }
-    
+
     public void triggerEndingScreen() {
-        
+
     }
 }
