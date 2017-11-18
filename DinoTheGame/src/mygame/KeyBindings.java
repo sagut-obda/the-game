@@ -8,7 +8,7 @@ package mygame;
 import com.jme3.input.KeyInput;
 
 /**
- *
+ * the class that save only for binding keys
  * @author Ferdian
  */
 public class KeyBindings {

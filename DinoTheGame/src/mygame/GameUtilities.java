@@ -8,17 +8,17 @@ import com.jme3.asset.AssetManager;
  * and open the template in the editor.
  */
 /**
- *
+ * a singleton that save some value that needed later on
  * @author Ferdian
  */
 public class GameUtilities {
 
     private static GameUtilities instance;
-    private AssetManager assetManager;
-    private float edgesLeft;
-    private float edgesRight;
-    private int manyFloor;
-    private int manyObstacle;
+    private final AssetManager assetManager;
+    private final float edgesLeft;
+    private final float edgesRight;
+    private final int manyFloor;
+    private final int manyObstacle;
 
     private GameUtilities(AssetManager assetManager) {
         this.assetManager = assetManager;

@@ -34,17 +34,28 @@ public  class PlainObjectAnimated extends PlainObject {
      public PlainObjectAnimated(AssetManager assetManager, String name, String path) {
         super(assetManager, name, path);
     }
-
+     /**
+      * method to add animation use this method if the animation in the child node of scene in scene composer
+      * 
+      * @param nameChild 
+      */
     public void addAndCreateAnimation(String nameChild) {
         control = ((Node) this.spatial).getChild(nameChild).getControl(AnimControl.class);
         channel = control.createChannel();
     }
-
+    /**
+     * method to add animation use this 
+     * if the animations are in the same level with scene
+     */
     public void addAndCreateAnimation() {
         control = ((Node) this.spatial).getControl(AnimControl.class);
         channel = control.createChannel();
     }
-
+    /**
+     * set the animation
+     * it can be work if you call addAndCreateAnimation first
+     * @param nameAnimation name the animation
+     */
     public void setAnimation(String nameAnimation) {
         if (control == null || channel == null) {
             return;

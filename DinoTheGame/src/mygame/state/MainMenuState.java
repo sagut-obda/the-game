@@ -45,7 +45,11 @@ public class MainMenuState extends SagutAppState {
         super(sapp, "Main Menu");
         initKeys();
     }
-
+    /**
+     * the method that build up the scenario of games
+     * @param stateManager : the state manager
+     * @param app :the app
+     */
     @Override
     public void init(AppStateManager stateManager, Application app) {
         stateManager.attach(this.bulletappstate);
@@ -118,7 +122,9 @@ public class MainMenuState extends SagutAppState {
         // Add HUD
         stateManager.attach(new HUDGuiState(sapp, "HUD"));
     }
-
+    /**
+     * initialize the keys for player can play it
+     */
     private void initKeys() {
         KeyBindings k = new KeyBindings();
         inputManager.addMapping("Left", new KeyTrigger(k.GO_LEFT));
@@ -127,7 +133,9 @@ public class MainMenuState extends SagutAppState {
         inputManager.addListener(actionListener, "Left", "Right", "Jump");
 
     }
-
+    /**
+     * method for add decorate such as water , the sun , and stone
+     */
     private void addDecorate() {
         ObjectUtilites iniAir = new ObjectUtilites(((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("World"), assetManager.loadTexture("Models/watertexture.jpg"));
         ObjectUtilites iniBatuKiri = new ObjectUtilites(((Node) (assetManager.loadModel("Scenes/World.j3o"))).getChild("Stone"), assetManager.loadTexture("Models/stoneasset.jpg"));
@@ -154,7 +162,10 @@ public class MainMenuState extends SagutAppState {
 
     };
     protected boolean gameOverDebouncer = false;
-
+    /**
+     * main loop for this method
+     * @param tpf : time per frame the constant value that needed for fair play
+     */
     @Override
     public void update(float tpf) {
         character.move();
@@ -171,8 +182,8 @@ public class MainMenuState extends SagutAppState {
             int x = character.collideWith(o.getWorldBound(), res);
             if (x>30&&!gameOverDebouncer) {
                 gameOverDebouncer = true;
-                //HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
-                reset();
+                HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
+                //reset();
             }else if(x!=0){
               //  o.printInfo();
                 System.out.println(x);
@@ -186,6 +197,9 @@ public class MainMenuState extends SagutAppState {
         }
 
     }
+    /**
+     * method for restart the game
+     */
     public void reset(){
         // reset method only reset the obstacle position and score
         Iterator<Obstacle> it = poolObstacle.iterator();

@@ -13,6 +13,7 @@ import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import javafx.concurrent.Task;
+import mygame.Main;
 import mygame.models.PlainHighScore;
 import mygame.state.MainMenuState;
 
@@ -129,6 +130,7 @@ public class HUDGuiState extends SagutGuiState {
         lblValueHigh.setText(String.valueOf(hs.getLngHighestScore()));
         lblValueScore.setText(String.valueOf(scoreTotal));
         nifty.gotoScreen("scrGameOver");
+        ((Main)sapp).triggerStartGame();
     }
     
     public void triggerResetScore() {
