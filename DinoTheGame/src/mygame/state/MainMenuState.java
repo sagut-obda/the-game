@@ -8,6 +8,7 @@ package mygame.state;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.TextureKey;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
@@ -19,9 +20,13 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.texture.Texture;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -113,7 +118,11 @@ public class MainMenuState extends SagutAppState {
         z.setTexture("ColorMap", assetManager.loadTexture("Models/assetMatahari.jpg"));
         y.setMaterial(z);
         Material zz1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        zz1.setTexture("ColorMap", assetManager.loadTexture("Models/stoneasset.jpg"));
+        Texture txrStone = assetManager.loadTexture(new TextureKey("Models/stoneasset.jpg", false));
+        txrStone.setWrap(Texture.WrapMode.Repeat);
+        zz1.setTexture("ColorMap", txrStone);
+        ((Geometry)zz).getMesh().scaleTextureCoordinates(new Vector2f(3f,200f));
+        
         zz.setMaterial(zz1);
         Spatial zz2 =zz.clone();
         zz2.setLocalTranslation(0, -0.5f, -7);
@@ -191,6 +200,6 @@ public class MainMenuState extends SagutAppState {
             Floor f = it.next();
             f.move(tpf);
         }
-        
+        Iterator<Floor> it = poolFloor.iterator();
     }
 }
