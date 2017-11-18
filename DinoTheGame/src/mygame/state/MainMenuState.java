@@ -29,6 +29,7 @@ import mygame.KeyBindings;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.Obstacle;
+import mygame.state.gui.HUDGuiState;
 
 /**
  *
@@ -137,7 +138,7 @@ public class MainMenuState extends SagutAppState {
         DirectionalLight sunBlakang = new DirectionalLight();
         sunBlakang.setDirection(new Vector3f(10, 2, -1).normalizeLocal());
         sunBlakang.setColor(ColorRGBA.White);
-        rootNode.addLight(sunBlakang
+        rootNode.addLight(sunBlakang);
         // Add HUD
         stateManager.attach(new HUDGuiState(sapp, "HUD"));
     }

@@ -38,8 +38,8 @@ public class HUDGuiState extends SagutGuiState {
 
     @Override
     protected void init(AppStateManager stateManager, Application app) {
-        nifty.fromXml("Interface/scrHUD.xml", "HUDGameScreen", this);
-        lblScore = nifty.getScreen("HUDGameScreen")
+        nifty.fromXml("Interface/hud-gui.xml", "scrHUD", this);
+        lblScore = nifty.getScreen("scrHUD")
                 .findElementById("lblScore")
                 .getRenderer(TextRenderer.class);
     }
