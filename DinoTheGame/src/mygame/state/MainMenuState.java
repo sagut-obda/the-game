@@ -164,7 +164,7 @@ public class MainMenuState extends SagutAppState {
         }
 
     };
-
+    protected boolean gameOverDebouncer = false;
     @Override
     public void update(float tpf) {
         character.move();
@@ -179,8 +179,10 @@ public class MainMenuState extends SagutAppState {
                 localRootNode.attachChild(o.getSpatial());
             }
             int x = character.collideWith(o.getWorldBound(), res);
-            if (x != 0) {
-
+            if (x != 0 && !gameOverDebouncer) {
+                System.out.println("Collide?");
+                gameOverDebouncer = true;
+                HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
             }
 
         }
