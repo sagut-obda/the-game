@@ -28,50 +28,50 @@ import com.jme3.scene.Node;
  *
  * @author G. Christianto
  */
-public abstract class SagutAppState extends BaseAppState { 
+public abstract class SagutAppState extends BaseAppState {
+
     protected SimpleApplication sapp;
     protected final Node localRootNode;
-    protected final Node rootNode ;
+    protected final Node rootNode;
     protected final AssetManager assetManager;
-    protected FlyByCamera flycamera ;
+    protected FlyByCamera flycamera;
     protected BulletAppState bulletappstate;
-    protected CharacterControl characterControl ;
+    protected CharacterControl characterControl;
     protected ChaseCamera chaseCamera;
     protected Camera camera;
     protected InputManager inputManager;
-    public SagutAppState (SimpleApplication sapp, String rootNodeName){
+
+    public SagutAppState(SimpleApplication sapp, String rootNodeName) {
         this.sapp = sapp;
         this.localRootNode = new Node(rootNodeName);
-        this.rootNode =sapp.getRootNode();
-        this.flycamera = sapp.getFlyByCamera();
+        this.rootNode = sapp.getRootNode();
+        flycamera = sapp.getFlyByCamera();
         this.assetManager = sapp.getAssetManager();
-        this.camera= sapp.getCamera();
-        this.inputManager = sapp.getInputManager();
-        
+        camera = sapp.getCamera();
+        inputManager = sapp.getInputManager();
     }
-    
+
     @Override
     protected void initialize(Application app) {
         bulletappstate = new BulletAppState();
         rootNode.attachChild(localRootNode);
         this.init(this.getStateManager(), app);
-        
     }
-    
+
     protected abstract void init(AppStateManager stateManager, Application app);
 
     @Override
     protected void cleanup(Application app) {
-        this.sapp.getRootNode().detachChild(localRootNode);
+
     }
 
     @Override
     protected void onEnable() {
-    
+
     }
 
     @Override
     protected void onDisable() {
-    
+        this.sapp.getRootNode().detachChild(localRootNode);
     }
 }

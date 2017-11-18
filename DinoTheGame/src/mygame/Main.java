@@ -1,10 +1,11 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppState;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import mygame.state.MainMenuState;
-
+import mygame.state.screen.MainMenuScreenState;
 
 /**
  * This is the Main Class of your Game. You should only do initialization here.
@@ -18,6 +19,8 @@ public class Main extends SimpleApplication {
 
     public static void main(String[] args) {
         Main app = new Main();
+        app.setDisplayFps(false);
+        app.setDisplayStatView(false);
         if (quickDevelopmentMode) {
             configForQuickDevelopmentMode(app);
         }
@@ -30,19 +33,43 @@ public class Main extends SimpleApplication {
         app.setShowSettings(false);
         app.setSettings(apset);
     }
-
+    
+    private AppState activeScreen;
+    
+    private void switchState(AppState nextState) {
+        if(activeScreen != null){
+            activeScreen.setEnabled(false);
+            stateManager.detach(activeScreen);
+        }
+        activeScreen = nextState;
+        stateManager.attach(activeScreen);
+    }
+    
     @Override
     public void simpleInitApp() {
-        stateManager.attach(new MainMenuState(this));
+        // This will load the main menu first, as a loader.
+        this.triggerMainMenu();
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
+        
+    }
+    
+    public void triggerStartGame() {
+        switchState(new MainMenuState(this));
+    }
+    
+    public void triggerMainMenu() {
+        switchState(new MainMenuScreenState(this));
+    }
+    
+    public void triggerEndingScreen() {
+        
     }
 }
