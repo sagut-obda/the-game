@@ -6,6 +6,7 @@
 package mygame.state;
 
 import com.jme3.app.Application;
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bounding.BoundingBox;
@@ -40,7 +41,7 @@ public class MainMenuState extends SagutAppState {
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
-    
+
     public MainMenuState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
         initKeys();
@@ -52,6 +53,7 @@ public class MainMenuState extends SagutAppState {
         //Construct the memory pooling technique
         poolFloor = new LinkedList<>();
         poolObstacle = new LinkedList<>();
+        stateManager.detach(stateManager.getState(FlyCamAppState.class));
         //----------------------------
         //Initiate Control Mode 
         this.bulletappstate.setDebugEnabled(false);
@@ -98,7 +100,7 @@ public class MainMenuState extends SagutAppState {
             localRootNode.attachChild(s);
             Obstacle o = new Obstacle(s, -20, 0, 0);
             o.setAsset(assetManager);
-            o.setX(50 + 50 * i);
+            o.setX(150 + 50 * i);
             o.setZ(-1);
             poolObstacle.add(o);
         }
@@ -115,7 +117,7 @@ public class MainMenuState extends SagutAppState {
         Material zz1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         zz1.setTexture("ColorMap", assetManager.loadTexture("Models/stoneasset.jpg"));
         zz.setMaterial(zz1);
-        Spatial zz2 =zz.clone();
+        Spatial zz2 = zz.clone();
         zz2.setLocalTranslation(0, -0.5f, -7);
         localRootNode.attachChild(s);
         localRootNode.attachChild(y);
@@ -128,8 +130,9 @@ public class MainMenuState extends SagutAppState {
         //------------------------------------
         //Last for all ~fiuh , set the camera 
         chaseCamera = new ChaseCamera(camera, character.getSpatial(), inputManager);
-        chaseCamera.setDefaultHorizontalRotation(-3.2f);
+        chaseCamera.setDefaultHorizontalRotation(3.13f);
         chaseCamera.setDefaultVerticalRotation(0.2f);
+        chaseCamera.setRotationSpeed(0);
         //----------------------------------
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-10, 2, -1).normalizeLocal());
@@ -154,17 +157,19 @@ public class MainMenuState extends SagutAppState {
     private ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-            if (name.equals("Left")) {
+
+            if (name.equals("Left") && !gameOverDebouncer) {
                 character.isLeft(isPressed);
-            } else if (name.equals("Right")) {
+            } else if (name.equals("Right") && !gameOverDebouncer) {
                 character.isRight(isPressed);
-            } else if (name.equals("Jump")) {
+            } else if (name.equals("Jump") && !gameOverDebouncer) {
                 character.jump();
             }
         }
 
     };
     protected boolean gameOverDebouncer = false;
+
     @Override
     public void update(float tpf) {
         character.move();
@@ -180,7 +185,6 @@ public class MainMenuState extends SagutAppState {
             }
             int x = character.collideWith(o.getWorldBound(), res);
             if (x != 0 && !gameOverDebouncer) {
-                System.out.println("Collide?");
                 gameOverDebouncer = true;
                 HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
             }
@@ -191,6 +195,6 @@ public class MainMenuState extends SagutAppState {
             Floor f = it.next();
             f.move(tpf);
         }
-        
+
     }
 }

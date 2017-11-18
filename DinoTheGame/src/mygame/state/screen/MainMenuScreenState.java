@@ -18,7 +18,6 @@ import mygame.state.gui.MainMenuGuiState;
 public final class MainMenuScreenState extends SagutAppState {
     
     private MainMenuGuiState guiMainMenu;
-    
     public MainMenuScreenState(SimpleApplication sapp) {
         super(sapp, "MainMenuScreen");
     }
@@ -28,6 +27,7 @@ public final class MainMenuScreenState extends SagutAppState {
         guiMainMenu = new MainMenuGuiState(sapp);
         stateManager.attach(guiMainMenu);
         inputManager.setCursorVisible(true);
+        //flycamera = app.get
     }
     
     @Override

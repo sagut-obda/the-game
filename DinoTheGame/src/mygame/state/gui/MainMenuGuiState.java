@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import mygame.Main;
+import mygame.state.MainMenuState;
 import mygame.state.SagutGuiState;
 
 /**
@@ -26,7 +27,7 @@ public class MainMenuGuiState extends SagutGuiState {
         return hud;
     }
 
-    public MainMenuGuiState(SimpleApplication sapp, String rootNodeName) {
+    public MainMenuGuiState(SimpleApplication sapp, String rootNodeName,AppStateManager stateManager) {
         super(sapp, rootNodeName);
          hud = this;
     }
@@ -34,6 +35,7 @@ public class MainMenuGuiState extends SagutGuiState {
     @Override
     protected void init(AppStateManager stateManager, Application app) {
         nifty.fromXml("Interface/main-menu-gui.xml", "scrMainMenu", this);
+        inputManager.setCursorVisible(true);
     }
     
     public void btnExit_Click() {
