@@ -170,9 +170,9 @@ public class MainMenuState extends SagutAppState {
             }
             int x = character.collideWith(o.getWorldBound(), res);
             if (x>30&&!gameOverDebouncer) {
-                System.out.println(x);
                 gameOverDebouncer = true;
-                HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
+                //HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
+                reset();
             }else if(x!=0){
               //  o.printInfo();
                 System.out.println(x);
@@ -185,5 +185,17 @@ public class MainMenuState extends SagutAppState {
             f.move(tpf);
         }
 
+    }
+    public void reset(){
+        // reset method only reset the obstacle position and score
+        Iterator<Obstacle> it = poolObstacle.iterator();
+        int i = 0;
+        while(it.hasNext()){
+            Obstacle o = it.next();
+            o.setX(150+50*i);
+            i++;
+        }
+        gameOverDebouncer = false ;
+        ((HUDGuiState)stateManager.getState(HUDGuiState.class)).updateScore(0);
     }
 }
