@@ -12,6 +12,7 @@ import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import javafx.concurrent.Task;
+import mygame.models.PlainHighScore;
 
 /**
  *
@@ -27,6 +28,7 @@ public class HUDGuiState extends SagutGuiState {
     protected Task<Void> tskScoreUpdater;
     protected Thread thdScore;
     protected boolean stopRequested;
+    protected PlainHighScore hs;
 
     public static HUDGuiState getCurrentInstance() {
         return hud;
@@ -37,6 +39,7 @@ public class HUDGuiState extends SagutGuiState {
         hud = this;
         stopRequested = false;
         scoreTotal = 0;
+        hs = PlainHighScore.load();
     }
 
     @Override
@@ -119,6 +122,9 @@ public class HUDGuiState extends SagutGuiState {
 
     public void triggerShowGameOverScreen() {
         isOver = true;
+        hs.setLngHighestScore(scoreTotal);
+        hs.save();
+        lblValueHigh.setText(String.valueOf(hs.getLngHighestScore()));
         lblValueScore.setText(String.valueOf(scoreTotal));
         nifty.gotoScreen("scrGameOver");
     }
