@@ -39,10 +39,8 @@ public abstract class SagutGuiState extends SagutAppState implements ScreenContr
     }
 
     @Override
-    protected void cleanup(Application app) {
+    public void onDisable() {
         sapp.getGuiViewPort().removeProcessor(niftyDisplay);
-        nifty.exit();
-        super.cleanup(app);
     }
     
     @Override

@@ -37,8 +37,10 @@ public class Main extends SimpleApplication {
     private AppState activeScreen;
     
     private void switchState(AppState nextState) {
-        if(activeScreen != null)
+        if(activeScreen != null){
+            activeScreen.setEnabled(false);
             stateManager.detach(activeScreen);
+        }
         activeScreen = nextState;
         stateManager.attach(activeScreen);
     }

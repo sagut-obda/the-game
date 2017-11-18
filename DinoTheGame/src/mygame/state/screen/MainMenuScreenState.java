@@ -30,4 +30,9 @@ public final class MainMenuScreenState extends SagutAppState {
         inputManager.setCursorVisible(true);
     }
     
+    @Override
+    protected void onDisable(){
+        guiMainMenu.setEnabled(false);
+    }
+    
 }
