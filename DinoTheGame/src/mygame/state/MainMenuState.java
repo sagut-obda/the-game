@@ -39,7 +39,7 @@ public class MainMenuState extends SagutAppState {
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
-
+    
     public MainMenuState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
         initKeys();
@@ -137,7 +137,9 @@ public class MainMenuState extends SagutAppState {
         DirectionalLight sunBlakang = new DirectionalLight();
         sunBlakang.setDirection(new Vector3f(10, 2, -1).normalizeLocal());
         sunBlakang.setColor(ColorRGBA.White);
-        rootNode.addLight(sunBlakang);
+        rootNode.addLight(sunBlakang
+        // Add HUD
+        stateManager.attach(new HUDGuiState(sapp, "HUD"));
     }
 
     private void initKeys() {
@@ -186,5 +188,6 @@ public class MainMenuState extends SagutAppState {
             Floor f = it.next();
             f.move(tpf);
         }
+        
     }
 }
