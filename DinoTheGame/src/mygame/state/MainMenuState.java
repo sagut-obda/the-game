@@ -8,6 +8,8 @@ package mygame.state;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.audio.AudioData;
+import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
@@ -37,6 +39,7 @@ import mygame.state.gui.HUDGuiState;
  */
 public class MainMenuState extends SagutAppState {
 
+    private AudioNode BGM;
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
@@ -49,6 +52,12 @@ public class MainMenuState extends SagutAppState {
     @Override
     public void init(AppStateManager stateManager, Application app) {
         stateManager.attach(this.bulletappstate);
+        BGM = new AudioNode(assetManager, "Sounds/finalv3.ogg", AudioData.DataType.Stream);
+        BGM.setLooping(true);
+        BGM.setPositional(false);
+        BGM.setVolume(2);
+        localRootNode.attachChild(BGM);
+        BGM.play();
         //Construct the memory pooling technique
         poolFloor = new LinkedList<>();
         poolObstacle = new LinkedList<>();
@@ -181,6 +190,7 @@ public class MainMenuState extends SagutAppState {
             int x = character.collideWith(o.getWorldBound(), res);
             if (x != 0 && !gameOverDebouncer) {
                 System.out.println("Collide?");
+                BGM.pause();
                 gameOverDebouncer = true;
                 HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
             }
