@@ -2,13 +2,10 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppState;
-import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import mygame.state.MainMenuState;
 import mygame.state.SagutAppState;
+import mygame.state.screen.GameScreenAppState;
 import mygame.state.screen.MainMenuScreenState;
 
 /**
@@ -66,14 +63,10 @@ public class Main extends SimpleApplication {
     }
 
     public void triggerStartGame() {
-        switchState(new MainMenuState(this));
+        switchState(new GameScreenAppState(this));
     }
 
     public void triggerMainMenu() {
         switchState(new MainMenuScreenState(this));
-    }
-
-    public void triggerEndingScreen() {
-
     }
 }

@@ -60,6 +60,7 @@ public final class MainMenuScreenState extends SagutAppState {
         localRootNode.addLight(al);
         sapp.getViewPort().setBackgroundColor(new ColorRGBA(0.8f, 0.8f, 0.8f, 1));
     }
+    
     private final ActionListener actionListener = new ActionListener() {
         protected boolean startDebouncer = false;
         @Override
@@ -77,7 +78,7 @@ public final class MainMenuScreenState extends SagutAppState {
         inputManager.removeListener(actionListener);
         this.stateManager.detach(guiMainMenu);
         sapp.getViewPort().setBackgroundColor(ColorRGBA.Black);
-        this.getStateManager().detach(guiMainMenu);
+        super.cleanup(app);
     }
     
 }

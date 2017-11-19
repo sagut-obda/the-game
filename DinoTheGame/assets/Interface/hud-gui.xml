@@ -12,11 +12,15 @@
                     <control name="label" id="lblScoreHigh" width="100px" x="40" y="-9" text="GLabel2" height="50px" font="aurulent-sans-16.fnt"/>
                 </panel>
             </panel>
-            <image id="GImage1" filename="Interface/hud-resources/hud_img-gameplay-objective.png" valign="bottom" align="center">
+            <image id="GImage4" filename="Interface/hud-resources/hud_img-btn-pause.png" align="right" valign="top" height="30px" width="30px">
+                <interact onClick="triggerPause()"/> 
+            </image>
+            <panel id="GPanel7" childLayout="vertical" valign="bottom" align="center" backgroundColor="#000000aa" width="100%" height="127px">
+                <image id="GImage1" filename="Interface/hud-resources/hud_img-gameplay-objective.png" align="center"/>
                 <effect>
                     <onStartScreen name="fade" startDelay="2000" start="#f" end="#0" length="500" neverStopRendering="true"/>
                 </effect>
-            </image>
+            </panel>
         </layer>
         <layer id="GLayer6" childLayout="center" valign="center" align="center">
             <image setVisible="false" id="imgPause" filename="Interface/hud-resources/hud_img-game-pause.png"/>

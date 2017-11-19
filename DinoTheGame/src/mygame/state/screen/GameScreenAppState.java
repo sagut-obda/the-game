@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mygame.state;
+package mygame.state.screen;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.app.Application;
@@ -24,12 +24,15 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mygame.GameUtilities;
 import mygame.KeyBindings;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.ObjectUtilites;
 import mygame.models.Obstacle;
+import mygame.state.SagutAppState;
 import mygame.state.gui.HUDGuiState;
 import org.lwjgl.input.Keyboard;
 
@@ -37,19 +40,19 @@ import org.lwjgl.input.Keyboard;
  *
  * @author hayashi & Ferdian
  */
-public class MainMenuState extends SagutAppState {
+public class GameScreenAppState extends SagutAppState {
 
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
     
 
-    public MainMenuState(SimpleApplication sapp) {
+    public GameScreenAppState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
         initKeys();
     }
     
-    private MainMenuState dis;
+    private GameScreenAppState dis;
     
     /**
      * the method that build up the scenario of games
@@ -64,15 +67,17 @@ public class MainMenuState extends SagutAppState {
         poolFloor = new LinkedList<>();
         poolObstacle = new LinkedList<>();
         stateManager.detach(stateManager.getState(FlyCamAppState.class));
+        
         //----------------------------
         //Initiate Control Mode 
-        this.bulletappstate.setDebugEnabled(true);
+        this.bulletappstate.setDebugEnabled(false);
         this.flycamera.setEnabled(false);
+        
         //-----------------------------
         //Load all Model Character
-
         character = new GameCharacter(GameUtilities.getInstance().getAssetManager(), "Kizuna Ai", "Models/kizuna/kizuna.j3o");
         character.setInputManager(app.getInputManager());
+        
         //------------------------------
         //Set Character Control for Player (character)
         character.createControl();
@@ -80,6 +85,14 @@ public class MainMenuState extends SagutAppState {
         character.setLocation(10, 2, -1);
         character.addAndCreateAnimation("kizunaai_mesh");
         character.setAnimation("Walk");
+        try {
+            character.getControl().setJumpSpeed(30);
+            character.getControl().setFallSpeed(50);
+            character.getControl().setGravity(70);
+        } catch (Exception ex) {
+            Logger.getLogger(GameScreenAppState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         //-----------------------------------------------------
         //Attach to the localRoot and add all items to Pooling Structure data
         localRootNode.attachChild(character.getSpatial());
@@ -103,6 +116,7 @@ public class MainMenuState extends SagutAppState {
             localRootNode.attachChild(o.getSpatial());
         }
         addDecorate();
+        
         //------------------------------
         //---------- bullet appstate controller in here
         bulletappstate.getPhysicsSpace().add(localRootNode.getChild("World").getControl(RigidBodyControl.class));
@@ -111,12 +125,14 @@ public class MainMenuState extends SagutAppState {
         } catch (Exception ex) {
 
         }
+        
         //------------------------------------
         //Last for all ~fiuh , set the camera 
         chaseCamera = new ChaseCamera(camera, character.getSpatial(), inputManager);
         chaseCamera.setDefaultHorizontalRotation(3.13f);
         chaseCamera.setDefaultVerticalRotation(0.2f);
         chaseCamera.setRotationSpeed(0);
+        
         //----------------------------------
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-10, 2, -1).normalizeLocal());
@@ -126,6 +142,7 @@ public class MainMenuState extends SagutAppState {
         sunBlakang.setDirection(new Vector3f(10, 2, -1).normalizeLocal());
         sunBlakang.setColor(ColorRGBA.White);
         rootNode.addLight(sunBlakang);
+        
         // Add HUD
         stateManager.attach(new HUDGuiState(sapp, "HUD"));
     }
@@ -134,12 +151,12 @@ public class MainMenuState extends SagutAppState {
      * initialize the keys for player can play it
      */
     private void initKeys() {
-        KeyBindings k = new KeyBindings();
-        inputManager.addMapping("Left", new KeyTrigger(k.GO_LEFT));
-        inputManager.addMapping("Right", new KeyTrigger(k.GO_RIGHT));
-        inputManager.addMapping("Jump", new KeyTrigger(k.JUMP));
-        inputManager.addMapping("Pause", new KeyTrigger(Keyboard.KEY_P));
-        inputManager.addListener(actionListener, "Left", "Right", "Jump", "Pause");
+        inputManager.addMapping("Left", new KeyTrigger(KeyBindings.GO_LEFT));
+        inputManager.addMapping("Right", new KeyTrigger(KeyBindings.GO_RIGHT));
+        inputManager.addMapping("Jump", new KeyTrigger(KeyBindings.JUMP));
+        inputManager.addMapping("Pause", new KeyTrigger(KeyBindings.GO_PAUSE));
+        inputManager.addMapping("Restart", new KeyTrigger(KeyBindings.GO_RESTART));
+        inputManager.addListener(actionListener, "Left", "Right", "Jump", "Pause", "Restart");
 
     }
     
@@ -158,10 +175,9 @@ public class MainMenuState extends SagutAppState {
         localRootNode.attachChild(iniTrump.getSpatial());
     }
     
-    private ActionListener actionListener = new ActionListener() {
+    private final ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-
             if (name.equals("Left") && !gameOverDebouncer && dis.isEnabled()) {
                 character.isLeft(isPressed);
             } else if (name.equals("Right") && !gameOverDebouncer && dis.isEnabled()) {
@@ -170,11 +186,13 @@ public class MainMenuState extends SagutAppState {
                 character.jump();
             } else if (name.equals("Pause") && isPressed && !gameOverDebouncer) {
                 dis.setEnabled(!dis.isEnabled());
+            } else if (name.equals("Restart") && isPressed && !gameOverDebouncer && !dis.isEnabled()){
+                reset();
             }
         }
     };
     
-    private ActionListener gameRestart = new ActionListener() {
+    private final ActionListener gameRestart = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             if (name.equals("Restart") && gameOverDebouncer) {
@@ -185,6 +203,12 @@ public class MainMenuState extends SagutAppState {
     };
     
     protected boolean gameOverDebouncer = false;
+    protected double timePassed = 0;
+    protected float incraseSpeedBy = 0.2f;
+    protected double incraseSpeedOn = 10;
+    protected float speed = 1f;
+    protected float speedMax = 8f;
+    protected boolean speedHasUpdatedDebouncer = false;
     
     /**
      * main loop for this method
@@ -192,12 +216,22 @@ public class MainMenuState extends SagutAppState {
      */
     @Override
     public void update(float tpf) {
+        timePassed += tpf;
+        if(timePassed >= incraseSpeedOn && !speedHasUpdatedDebouncer && !gameOverDebouncer && speed <= speedMax) {
+            timePassed = 0;
+            speed += speed * incraseSpeedBy;
+            speedHasUpdatedDebouncer = true;
+            System.out.println("Speed Incrased by " + speed);
+        } else {
+            speedHasUpdatedDebouncer = false;
+        }
+        
         character.move();
         Iterator<Obstacle> obit = poolObstacle.iterator();
         CollisionResults res = new CollisionResults();
         while (obit.hasNext()) {
             Obstacle o = obit.next();
-            o.move(tpf);
+            o.move(tpf * speed);
             if (o.getX() < -20) {
                 localRootNode.detachChild(o.getSpatial());
                 o.regenerate();
@@ -221,7 +255,7 @@ public class MainMenuState extends SagutAppState {
         Iterator<Floor> it = poolFloor.iterator();
         while (it.hasNext()) {
             Floor f = it.next();
-            f.move(tpf);
+            f.move(tpf * speed);
         }
     }
     
@@ -254,5 +288,8 @@ public class MainMenuState extends SagutAppState {
         inputManager.reset();
         initKeys();
         HUDGuiState.getCurrentInstance().triggerResetScore();
+        speed = 1.0f;
+        timePassed = 0;
+        this.setEnabled(true);
     }
 }

@@ -58,6 +58,7 @@ public abstract class SagutAppState extends BaseAppState {
     @Override
     protected void initialize(Application app) {
         bulletappstate = new BulletAppState();
+        //bulletappstate = stateManager.getState(BulletAppState.class);
         rootNode.attachChild(localRootNode);
         this.init(stateManager, app);
     }
