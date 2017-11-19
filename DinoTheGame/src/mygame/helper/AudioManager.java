@@ -58,4 +58,8 @@ public class AudioManager {
     public void pauseMusic(){
         currentMusic.pause();
     }
+    
+    public void stopMusic(){
+        currentMusic.stop();
+    }
 }
