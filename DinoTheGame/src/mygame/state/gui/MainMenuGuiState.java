@@ -37,12 +37,4 @@ public class MainMenuGuiState extends SagutGuiState {
         nifty.fromXml("Interface/main-menu-gui.xml", "scrMainMenu", this);
         inputManager.setCursorVisible(true);
     }
-    
-    public void btnExit_Click() {
-        sapp.stop();
-    }
-    
-    public void btnStart_Click() {
-        ((Main)sapp).triggerStartGame();
-    }
 }

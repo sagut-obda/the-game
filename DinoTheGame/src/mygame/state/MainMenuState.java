@@ -30,6 +30,7 @@ import mygame.models.GameCharacter;
 import mygame.models.ObjectUtilites;
 import mygame.models.Obstacle;
 import mygame.state.gui.HUDGuiState;
+import org.lwjgl.input.Keyboard;
 
 /**
  *
@@ -147,10 +148,10 @@ public class MainMenuState extends SagutAppState {
         localRootNode.attachChild(iniBatuKanan.getSpatial());
         localRootNode.attachChild(iniTrump.getSpatial());
     }
+    
     private ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-
             if (name.equals("Left") && !gameOverDebouncer) {
                 character.isLeft(isPressed);
             } else if (name.equals("Right") && !gameOverDebouncer) {
@@ -159,8 +160,17 @@ public class MainMenuState extends SagutAppState {
                 character.jump();
             }
         }
-
     };
+    
+    private ActionListener gameRestart = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (name.equals("Restart") && gameOverDebouncer) {
+                reset();
+            }
+        }
+    };
+    
     protected boolean gameOverDebouncer = false;
     /**
      * main loop for this method
@@ -182,6 +192,10 @@ public class MainMenuState extends SagutAppState {
             int x = character.collideWith(o.getWorldBound(), res);
             if (x>30&&!gameOverDebouncer) {
                 gameOverDebouncer = true;
+                inputManager.removeListener(actionListener);
+                inputManager.reset();
+                inputManager.addMapping("Restart", new KeyTrigger(Keyboard.KEY_SPACE));
+                inputManager.addListener(gameRestart, "Restart");
                 HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
                 //reset();
             }else if(x!=0){
@@ -210,6 +224,9 @@ public class MainMenuState extends SagutAppState {
             i++;
         }
         gameOverDebouncer = false ;
-        ((HUDGuiState)stateManager.getState(HUDGuiState.class)).updateScore(0);
+        inputManager.removeListener(gameRestart);
+        inputManager.reset();
+        initKeys();
+        HUDGuiState.getCurrentInstance().triggerResetScore();
     }
 }
