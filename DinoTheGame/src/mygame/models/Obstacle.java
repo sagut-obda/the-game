@@ -61,9 +61,9 @@ public class Obstacle extends PlainObject {
      * the method that used to reformat the hitbox of spatial for collisioning
      * purpose the spatial always use the AABB collision method
      *
-     * @param x set the x -> the length
-     * @param y set the y -> the height
-     * @param z set the z -> the width
+     * @param x set the x, the length
+     * @param y set the y, the height
+     * @param z set the z, the width
      */
     public void setValueOfHitBox(float x, float y, float z) {
         BoundingBox bb1 = (BoundingBox) getWorldBound();
