@@ -66,7 +66,7 @@ public abstract class SagutAppState extends BaseAppState {
 
     @Override
     protected void cleanup(Application app) {
-
+        this.sapp.getRootNode().detachChild(localRootNode);
     }
 
     @Override
@@ -76,6 +76,6 @@ public abstract class SagutAppState extends BaseAppState {
 
     @Override
     protected void onDisable() {
-        this.sapp.getRootNode().detachChild(localRootNode);
+        
     }
 }

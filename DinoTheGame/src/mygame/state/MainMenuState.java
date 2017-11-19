@@ -5,6 +5,7 @@
  */
 package mygame.state;
 
+import com.jme3.animation.AnimControl;
 import com.jme3.app.Application;
 import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
@@ -41,11 +42,15 @@ public class MainMenuState extends SagutAppState {
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
+    
 
     public MainMenuState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
         initKeys();
     }
+    
+    private MainMenuState dis;
+    
     /**
      * the method that build up the scenario of games
      * @param stateManager : the state manager
@@ -54,6 +59,7 @@ public class MainMenuState extends SagutAppState {
     @Override
     public void init(AppStateManager stateManager, Application app) {
         stateManager.attach(this.bulletappstate);
+        dis = this;
         //Construct the memory pooling technique
         poolFloor = new LinkedList<>();
         poolObstacle = new LinkedList<>();
@@ -123,6 +129,7 @@ public class MainMenuState extends SagutAppState {
         // Add HUD
         stateManager.attach(new HUDGuiState(sapp, "HUD"));
     }
+    
     /**
      * initialize the keys for player can play it
      */
@@ -131,9 +138,11 @@ public class MainMenuState extends SagutAppState {
         inputManager.addMapping("Left", new KeyTrigger(k.GO_LEFT));
         inputManager.addMapping("Right", new KeyTrigger(k.GO_RIGHT));
         inputManager.addMapping("Jump", new KeyTrigger(k.JUMP));
-        inputManager.addListener(actionListener, "Left", "Right", "Jump");
+        inputManager.addMapping("Pause", new KeyTrigger(Keyboard.KEY_P));
+        inputManager.addListener(actionListener, "Left", "Right", "Jump", "Pause");
 
     }
+    
     /**
      * method for add decorate such as water , the sun , and stone
      */
@@ -152,12 +161,15 @@ public class MainMenuState extends SagutAppState {
     private ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
-            if (name.equals("Left") && !gameOverDebouncer) {
+
+            if (name.equals("Left") && !gameOverDebouncer && dis.isEnabled()) {
                 character.isLeft(isPressed);
-            } else if (name.equals("Right") && !gameOverDebouncer) {
+            } else if (name.equals("Right") && !gameOverDebouncer && dis.isEnabled()) {
                 character.isRight(isPressed);
-            } else if (name.equals("Jump") && !gameOverDebouncer) {
+            } else if (name.equals("Jump") && !gameOverDebouncer && dis.isEnabled()) {
                 character.jump();
+            } else if (name.equals("Pause") && isPressed && !gameOverDebouncer) {
+                dis.setEnabled(!dis.isEnabled());
             }
         }
     };
@@ -169,9 +181,11 @@ public class MainMenuState extends SagutAppState {
                 reset();
             }
         }
+
     };
     
     protected boolean gameOverDebouncer = false;
+    
     /**
      * main loop for this method
      * @param tpf : time per frame the constant value that needed for fair play
@@ -209,8 +223,20 @@ public class MainMenuState extends SagutAppState {
             Floor f = it.next();
             f.move(tpf);
         }
-
     }
+    
+    @Override
+    protected void onEnable() {
+        HUDGuiState.getCurrentInstance().setEnabled(true);
+        localRootNode.getChild("kizunaai_mesh").getControl(AnimControl.class).setEnabled(true);
+    }
+    
+    @Override
+    protected void onDisable() {
+        HUDGuiState.getCurrentInstance().setEnabled(false);
+        localRootNode.getChild("kizunaai_mesh").getControl(AnimControl.class).setEnabled(false);
+    }
+    
     /**
      * method for restart the game
      */
