@@ -7,7 +7,6 @@ package mygame.state;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
@@ -16,8 +15,9 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
+ *  This class represents the GUI as an AppState. Made because
+ *  the GUI State requires Nifty, NiftyDisplay, and ScreenController.
  *
- * @author Hayashi
  */
 public abstract class SagutGuiState extends SagutAppState implements ScreenController {
     

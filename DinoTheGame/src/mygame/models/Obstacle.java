@@ -24,17 +24,19 @@ public class Obstacle extends PlainObject {
     public Obstacle(Spatial spatial, float vx, float vy, float vz) {
         super(spatial, vx, vy, vz);
     }
+
     /**
      * moving method
-     * @param tpf 
+     *
+     * @param tpf
      */
     public void move(float tpf) {
         controlUpdate(tpf);
     }
+
     /**
-     * method that using for regenerate 
-     * this method can change the spatial models
-     * and reset the position
+     * method that using for regenerate this method can change the spatial
+     * models and reset the position
      */
     public void regenerate() {
         Random rand = new Random();
@@ -54,13 +56,14 @@ public class Obstacle extends PlainObject {
         this.setZ((float) (-2.1 * nextPosition - 1));
         this.setX(200);
     }
+
     /**
-     * the method that used to reformat the hitbox of spatial
-     * for collisioning purpose
-     * the spatial always use the AABB collision method
+     * the method that used to reformat the hitbox of spatial for collisioning
+     * purpose the spatial always use the AABB collision method
+     *
      * @param x set the x -> the length
      * @param y set the y -> the height
-     * @param z set the z -> the width 
+     * @param z set the z -> the width
      */
     public void setValueOfHitBox(float x, float y, float z) {
         BoundingBox bb1 = (BoundingBox) getWorldBound();
@@ -69,10 +72,11 @@ public class Obstacle extends PlainObject {
         bb1.setZExtent(z);
         this.spatial.setModelBound(bb1);
     }
+
     /**
      * method that print the information
      */
-    public void printInfo(){
+    public void printInfo() {
         System.out.println(this.spatial.getWorldBound().toString());
     }
 

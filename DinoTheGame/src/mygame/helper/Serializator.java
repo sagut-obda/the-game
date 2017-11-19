@@ -5,7 +5,6 @@
  */
 package mygame.helper;
 
-import com.sun.scenario.effect.impl.prism.PrTexture;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,8 +17,8 @@ import java.io.Serializable;
 import java.util.Base64;
 
 /**
+ * A Helper class for Serializing object to a file.
  *
- * @author Hayashi
  */
 public class Serializator {
 
@@ -46,9 +45,10 @@ public class Serializator {
 
     /**
      * Write the object to a Base64 string.
+     *
      * @param o
-     * @return 
-     * @throws java.io.IOException 
+     * @return
+     * @throws java.io.IOException
      */
     public static String toString(Serializable o) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -57,7 +57,7 @@ public class Serializator {
         oos.close();
         return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
-    
+
     public static void toFile(Serializable o, File s) throws IOException {
         PrintWriter prntFileOutput = new PrintWriter(s);
         prntFileOutput.append(toString(o));

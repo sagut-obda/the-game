@@ -21,7 +21,8 @@ public final class ObjectUtilites extends PlainObject {
         material = new Material(GameUtilities.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         initialize();
     }
-    public void initialize(){
+
+    public void initialize() {
         this.material.setTexture("ColorMap", texture);
         this.spatial.setMaterial(material);
     }
