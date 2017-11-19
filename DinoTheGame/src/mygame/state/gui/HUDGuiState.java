@@ -8,12 +8,10 @@ package mygame.state.gui;
 import mygame.state.SagutGuiState;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
-import javafx.concurrent.Task;
-import mygame.Main;
+import de.lessvoid.nifty.elements.Element;
 import mygame.models.PlainHighScore;
 import mygame.state.MainMenuState;
 
@@ -25,9 +23,10 @@ public class HUDGuiState extends SagutGuiState {
 
     protected static HUDGuiState hud;
     protected TextRenderer lblScore;
-    protected TextRenderer lblScoreHigh;
     protected TextRenderer lblValueScore;
     protected TextRenderer lblValueHigh;
+    protected Element imgPause;
+    
     protected long scoreTotal;
     //protected Task<Void> tskScoreUpdater;
     //protected Thread thdScore;
@@ -49,17 +48,17 @@ public class HUDGuiState extends SagutGuiState {
     @Override
     protected void init(AppStateManager stateManager, Application app) {
         nifty.fromXml("Interface/hud-gui.xml", "scrHUD", this);
-        Screen scrHUD = nifty.getScreen("scrHUD");
-        lblScore = scrHUD.findElementById("lblScore")
+        lblScore = nifty.getScreen("scrHUD")
+                .findElementById("lblScore")
                 .getRenderer(TextRenderer.class);
-        lblScoreHigh = scrHUD.findElementById("lblScoreHigh")
-                .getRenderer(TextRenderer.class);
+        imgPause = nifty.getScreen("scrHUD")
+                .findElementById("imgPause");
         Screen scrGameOver = nifty.getScreen("scrGameOver");
         lblValueHigh = scrGameOver.findElementById("lblValueHigh")
                 .getRenderer(TextRenderer.class);
         lblValueScore = scrGameOver.findElementById("lblValueScore")
                 .getRenderer(TextRenderer.class);
-        lblScoreHigh.setText(String.valueOf(hs.getLngHighestScore()));
+        
     }
 
     protected int pointPerTicks = 1;
@@ -139,5 +138,19 @@ public class HUDGuiState extends SagutGuiState {
         updateScore(0);
         nifty.gotoScreen("scrHUD");
         isOver = false;
+    }
+    
+    public void triggerPause() {
+        stateManager.getState(MainMenuState.class).setEnabled(false);
+    }
+    
+    @Override
+    public void onDisable() {
+        imgPause.show();
+    }
+    
+    @Override
+    public void onEnable(){
+        imgPause.hide();
     }
 }

@@ -18,6 +18,9 @@
                 </effect>
             </image>
         </layer>
+        <layer id="GLayer6" childLayout="center" valign="center" align="center">
+            <image setVisible="false" id="imgPause" filename="Interface/hud-resources/hud_img-game-pause.png"/>
+        </layer>
     </screen>
     <screen id="scrGameOver">
         <layer id="GLayer3" childLayout="center">

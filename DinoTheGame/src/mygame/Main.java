@@ -43,7 +43,6 @@ public class Main extends SimpleApplication {
 
     private void switchState(SagutAppState nextState) {
         if (activeScreen != null) {
-            activeScreen.setEnabled(false);
             stateManager.detach(activeScreen);
         }
         activeScreen = nextState;

@@ -77,6 +77,7 @@ public final class MainMenuScreenState extends SagutAppState {
         inputManager.removeListener(actionListener);
         this.stateManager.detach(guiMainMenu);
         sapp.getViewPort().setBackgroundColor(ColorRGBA.Black);
+        this.getStateManager().detach(guiMainMenu);
     }
     
 }
