@@ -39,7 +39,6 @@ import org.lwjgl.input.Keyboard;
 
 /**
  *
- * @author hayashi & Ferdian
  */
 public class GameScreenAppState extends SagutAppState {
 
