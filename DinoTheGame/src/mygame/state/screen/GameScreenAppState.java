@@ -5,6 +5,7 @@
  */
 package mygame.state.screen;
 
+import mygame.helper.AudioManager;
 import com.jme3.animation.AnimControl;
 import com.jme3.app.Application;
 import com.jme3.app.FlyCamAppState;
@@ -28,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.GameUtilities;
 import mygame.KeyBindings;
-import mygame.helper.AudioManager;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.ObjectUtilites;
@@ -285,6 +285,7 @@ public class GameScreenAppState extends SagutAppState {
      */
     public void reset(){
         // reset method only reset the obstacle position and score
+        audioManager.playMusic(5, true, false);
         Iterator<Obstacle> it = poolObstacle.iterator();
         int i = 0;
         while(it.hasNext()){
