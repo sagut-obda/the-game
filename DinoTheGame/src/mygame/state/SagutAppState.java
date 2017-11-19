@@ -26,8 +26,10 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 
 /**
- *
- * @author G. Christianto
+ * This is the base (more like boilerplate) class of our AppState.
+ * This class will represent the basic cycle of the AppState classes.
+ * 
+ * 
  */
 public abstract class SagutAppState extends BaseAppState {
 
@@ -63,6 +65,11 @@ public abstract class SagutAppState extends BaseAppState {
         this.init(stateManager, app);
     }
 
+    /**
+     * Initialize the decendant's node.
+     * @param stateManager
+     * @param app 
+     */
     protected abstract void init(AppStateManager stateManager, Application app);
 
     @Override

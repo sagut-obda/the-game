@@ -25,31 +25,31 @@ import mygame.GameUtilities;
  * @author Ferdian
  */
 public class GameCharacter extends PlainObjectAnimated {
-    
+
     private InputManager inputManager;
     private CharacterControl thisControl;
     private Camera camera;
     private boolean toLeft = false, toRight = false;
-    
+
     public GameCharacter(float x, float y, float z, float vy, float vx, float vz, String nameObject, float height, float width, AssetManager assetManager, Texture texture, Material material, int type, float length, InputManager inputManager) {
-        super(x, y, z, vy, vx, vz, nameObject, height, width, assetManager, texture, material, type, length,inputManager);
+        super(x, y, z, vy, vx, vz, nameObject, height, width, assetManager, texture, material, type, length, inputManager);
         this.material = material;
         this.inputManager = inputManager;
     }
-    
+
     public GameCharacter(AssetManager assetManager, String name, String path) {
         super(assetManager, name, path);
     }
-    
+
     public void changeColor(ColorRGBA c) {
         material.setColor("Color", c);
         this.spatial.setMaterial(material);
     }
-    
+
     public void setInputManager(InputManager inputManager) {
         this.inputManager = inputManager;
     }
-    
+
     public void move() {
         Vector3f walkDirection = new Vector3f(0, 0, 0);
         Vector3f camLeft = camera.getLeft().clone();
@@ -73,21 +73,21 @@ public class GameCharacter extends PlainObjectAnimated {
             }
         }
         setPosition(thisControl.getPhysicsLocation());
-        
+
     }
-    
+
     public void isRight(boolean isRight) {
         toRight = isRight;
     }
-    
+
     public void isLeft(boolean isLeft) {
         toLeft = isLeft;
     }
-    
+
     public void setCamera(Camera camera) {
         this.camera = camera;
     }
-    
+
     public void createControl() {
         CharacterControl characterControl;
         BoundingBox bb = (BoundingBox) this.getWorldBound();
@@ -99,7 +99,7 @@ public class GameCharacter extends PlainObjectAnimated {
         this.thisControl = characterControl;
         this.spatial.addControl(thisControl);
     }
-    
+
     public void setLocation(float x, float y, float z) {
         if (this.thisControl == null) {
             this.setX(x);
@@ -109,18 +109,18 @@ public class GameCharacter extends PlainObjectAnimated {
             thisControl.setPhysicsLocation(new Vector3f(x, y, z));
         }
     }
-    
+
     public CharacterControl getControl() throws Exception {
         if (this.thisControl == null) {
             throw new Exception("Need Control");
         }
         return this.thisControl;
     }
-    
+
     public void jump() {
         this.thisControl.jump();
     }
-    
+
     public void setPosition(Vector3f vector) {
         setZ(vector.z);
         setY(vector.y);
@@ -129,20 +129,17 @@ public class GameCharacter extends PlainObjectAnimated {
 
     @Override
     public void addAndCreateAnimation() {
-        super.addAndCreateAnimation(); 
+        super.addAndCreateAnimation();
     }
 
     @Override
     public void setAnimation(String nameAnimation) {
-        super.setAnimation(nameAnimation); 
+        super.setAnimation(nameAnimation);
     }
 
     @Override
     public void addAndCreateAnimation(String nameChild) {
         super.addAndCreateAnimation(nameChild); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    
-    
+
 }

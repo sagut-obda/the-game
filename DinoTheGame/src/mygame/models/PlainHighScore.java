@@ -16,12 +16,15 @@ import mygame.helper.Serializator;
  *
  * @author Hayashi
  */
-public class PlainHighScore implements Serializable{
+public class PlainHighScore implements Serializable {
+
     private final static long serialVersionUID = 1;
-    
+
     private long lngHighestScore = 0;
 
     /**
+     * Get the biggest higscore available on the memory.
+     *
      * @return the lngHighestScore
      */
     public long getLngHighestScore() {
@@ -29,16 +32,26 @@ public class PlainHighScore implements Serializable{
     }
 
     /**
+     * Set the score. This will automaticly set the biggest score available.
+     *
      * @param lngHighestScore the lngHighestScore to set
      */
     public void setLngHighestScore(long lngHighestScore) {
         this.lngHighestScore = Math.max(lngHighestScore, this.lngHighestScore);
     }
-    
-    public void resetLngHighestScore(){
+
+    /**
+     * This will reset the high score memory.
+     */
+    public void resetLngHighestScore() {
         this.lngHighestScore = 0;
     }
-    
+
+    /**
+     * Load the highscore from file.
+     *
+     * @return PlainHighScore object
+     */
     public static PlainHighScore load() {
         try {
             Object obj = Serializator.fromFile(new File("game.obj.asc"));
@@ -48,12 +61,15 @@ public class PlainHighScore implements Serializable{
         }
         return new PlainHighScore();
     }
-    
+
+    /**
+     * Saves an object to a file
+     */
     public void save() {
         try {
             Serializator.toFile(this, new File("game.obj.asc"));
         } catch (IOException ex) {
-            
+
         }
     }
 }
