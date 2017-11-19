@@ -24,8 +24,10 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import mygame.KeyBindings;
 import mygame.models.Floor;
@@ -39,7 +41,8 @@ import mygame.state.gui.HUDGuiState;
  */
 public class MainMenuState extends SagutAppState {
 
-    private AudioNode BGM;
+    private List<AudioNode> BGMBank = new ArrayList<AudioNode>();
+    private AudioNode currentMusic;
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
@@ -48,16 +51,29 @@ public class MainMenuState extends SagutAppState {
         super(sapp, "Main Menu");
         initKeys();
     }
-
+    
+    public void addBackgroundMusic(String file){
+        BGMBank.add(new AudioNode(assetManager,file, AudioData.DataType.Stream));
+    }
+    
+    public void playMusic(Node node,int volume,boolean isLooping,boolean isPositional){
+        Random musicRotator = new Random();
+        int currentMusicIdx = musicRotator.nextInt(BGMBank.size());
+        currentMusic = BGMBank.get(currentMusicIdx);
+        currentMusic.setLooping(isLooping);
+        currentMusic.setPositional(isPositional);
+        currentMusic.setVolume(volume);
+        node.attachChild(currentMusic);
+        currentMusic.play();
+    }
     @Override
     public void init(AppStateManager stateManager, Application app) {
         stateManager.attach(this.bulletappstate);
-        BGM = new AudioNode(assetManager, "Sounds/finalv3.ogg", AudioData.DataType.Stream);
-        BGM.setLooping(true);
-        BGM.setPositional(false);
-        BGM.setVolume(2);
-        localRootNode.attachChild(BGM);
-        BGM.play();
+        addBackgroundMusic("Sounds/finalv1.ogg");
+        addBackgroundMusic("Sounds/finalv2.ogg");
+        addBackgroundMusic("Sounds/finalv3.ogg");
+        addBackgroundMusic("Sounds/ncs2016.ogg");
+        this.playMusic(localRootNode,4,true,false);
         //Construct the memory pooling technique
         poolFloor = new LinkedList<>();
         poolObstacle = new LinkedList<>();
@@ -190,7 +206,7 @@ public class MainMenuState extends SagutAppState {
             int x = character.collideWith(o.getWorldBound(), res);
             if (x != 0 && !gameOverDebouncer) {
                 System.out.println("Collide?");
-                BGM.pause();
+                currentMusic.pause();
                 gameOverDebouncer = true;
                 HUDGuiState.getCurrentInstance().triggerShowGameOverScreen();
             }
