@@ -133,7 +133,6 @@ public class HUDGuiState extends SagutGuiState {
         lblValueHigh.setText(String.valueOf(hs.getLngHighestScore()));
         lblValueScore.setText(String.valueOf(scoreTotal));
         nifty.gotoScreen("scrGameOver");
-        //((Main)sapp).triggerStartGame();
     }
     
     public void triggerResetScore() {
