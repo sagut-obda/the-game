@@ -1,0 +1,6 @@
+mygame
+mygame.helper
+mygame.models
+mygame.state
+mygame.state.gui
+mygame.state.screen
