@@ -284,6 +284,7 @@ public class GameScreenAppState extends SagutAppState {
      */
     public void reset(){
         // reset method only reset the obstacle position and score
+        audioManager.stopMusic();
         audioManager.playMusic(5, true, false);
         Iterator<Obstacle> it = poolObstacle.iterator();
         int i = 0;
