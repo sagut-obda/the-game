@@ -13,7 +13,7 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.elements.Element;
 import mygame.models.PlainHighScore;
-import mygame.state.MainMenuState;
+import mygame.state.screen.GameScreenAppState;
 
 /**
  *
@@ -23,6 +23,7 @@ public class HUDGuiState extends SagutGuiState {
 
     protected static HUDGuiState hud;
     protected TextRenderer lblScore;
+    protected TextRenderer lblScoreHigh;
     protected TextRenderer lblValueScore;
     protected TextRenderer lblValueHigh;
     protected Element imgPause;
@@ -48,17 +49,21 @@ public class HUDGuiState extends SagutGuiState {
     @Override
     protected void init(AppStateManager stateManager, Application app) {
         nifty.fromXml("Interface/hud-gui.xml", "scrHUD", this);
-        lblScore = nifty.getScreen("scrHUD")
-                .findElementById("lblScore")
+        
+        Screen scrHUD = nifty.getScreen("scrHUD");
+        lblScore = scrHUD.findElementById("lblScore")
+                .getRenderer(TextRenderer.class);
+        lblScoreHigh = scrHUD.findElementById("lblScoreHigh")
                 .getRenderer(TextRenderer.class);
         imgPause = nifty.getScreen("scrHUD")
                 .findElementById("imgPause");
+        
         Screen scrGameOver = nifty.getScreen("scrGameOver");
         lblValueHigh = scrGameOver.findElementById("lblValueHigh")
                 .getRenderer(TextRenderer.class);
         lblValueScore = scrGameOver.findElementById("lblValueScore")
                 .getRenderer(TextRenderer.class);
-        
+        lblScoreHigh.setText(String.valueOf(hs.getLngHighestScore()));
     }
 
     protected int pointPerTicks = 1;
@@ -141,7 +146,8 @@ public class HUDGuiState extends SagutGuiState {
     }
     
     public void triggerPause() {
-        stateManager.getState(MainMenuState.class).setEnabled(false);
+        GameScreenAppState mms = stateManager.getState(GameScreenAppState.class);
+        mms.setEnabled(!mms.isEnabled());
     }
     
     @Override

@@ -8,8 +8,6 @@ package mygame.state.gui;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
-import mygame.Main;
-import mygame.state.MainMenuState;
 import mygame.state.SagutGuiState;
 
 /**

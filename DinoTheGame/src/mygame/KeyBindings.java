@@ -12,7 +12,9 @@ import com.jme3.input.KeyInput;
  * @author Ferdian
  */
 public class KeyBindings {
-    public int JUMP = KeyInput.KEY_UP;
-    public int GO_LEFT = KeyInput.KEY_LEFT;
-    public int GO_RIGHT = KeyInput.KEY_RIGHT;
+    public final static int JUMP = KeyInput.KEY_UP;
+    public final static int GO_LEFT = KeyInput.KEY_LEFT;
+    public final static int GO_RIGHT = KeyInput.KEY_RIGHT;
+    public final static int GO_PAUSE = KeyInput.KEY_P;
+    public final static int GO_RESTART = KeyInput.KEY_R;
 }
