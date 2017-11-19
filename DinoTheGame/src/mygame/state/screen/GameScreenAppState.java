@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mygame.GameUtilities;
 import mygame.KeyBindings;
+import mygame.helper.AudioManager;
 import mygame.models.Floor;
 import mygame.models.GameCharacter;
 import mygame.models.ObjectUtilites;
@@ -42,6 +43,7 @@ import org.lwjgl.input.Keyboard;
  */
 public class GameScreenAppState extends SagutAppState {
 
+    private AudioManager audioManager;
     private GameCharacter character;
     private LinkedList<Floor> poolFloor;
     private LinkedList<Obstacle> poolObstacle;
@@ -50,6 +52,7 @@ public class GameScreenAppState extends SagutAppState {
     public GameScreenAppState(SimpleApplication sapp) {
         super(sapp, "Main Menu");
         initKeys();
+        audioManager = new AudioManager(assetManager, localRootNode);
     }
     
     private GameScreenAppState dis;
@@ -62,6 +65,11 @@ public class GameScreenAppState extends SagutAppState {
     @Override
     public void init(AppStateManager stateManager, Application app) {
         stateManager.attach(this.bulletappstate);
+        audioManager.addMusic("Sounds/finalv1.ogg");
+        audioManager.addMusic("Sounds/finalv2.ogg");
+        audioManager.addMusic("Sounds/finalv3.ogg");
+        audioManager.addMusic("Sounds/ncs2016.ogg");
+        audioManager.playMusic(5, true, false);
         dis = this;
         //Construct the memory pooling technique
         poolFloor = new LinkedList<>();
@@ -239,6 +247,7 @@ public class GameScreenAppState extends SagutAppState {
             }
             int x = character.collideWith(o.getWorldBound(), res);
             if (x>30&&!gameOverDebouncer) {
+                audioManager.pauseMusic();
                 gameOverDebouncer = true;
                 inputManager.removeListener(actionListener);
                 inputManager.reset();
