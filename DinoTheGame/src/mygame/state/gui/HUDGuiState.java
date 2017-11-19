@@ -25,6 +25,7 @@ public class HUDGuiState extends SagutGuiState {
 
     protected static HUDGuiState hud;
     protected TextRenderer lblScore;
+    protected TextRenderer lblScoreHigh;
     protected TextRenderer lblValueScore;
     protected TextRenderer lblValueHigh;
     protected long scoreTotal;
@@ -48,15 +49,17 @@ public class HUDGuiState extends SagutGuiState {
     @Override
     protected void init(AppStateManager stateManager, Application app) {
         nifty.fromXml("Interface/hud-gui.xml", "scrHUD", this);
-        lblScore = nifty.getScreen("scrHUD")
-                .findElementById("lblScore")
+        Screen scrHUD = nifty.getScreen("scrHUD");
+        lblScore = scrHUD.findElementById("lblScore")
+                .getRenderer(TextRenderer.class);
+        lblScoreHigh = scrHUD.findElementById("lblScoreHigh")
                 .getRenderer(TextRenderer.class);
         Screen scrGameOver = nifty.getScreen("scrGameOver");
         lblValueHigh = scrGameOver.findElementById("lblValueHigh")
                 .getRenderer(TextRenderer.class);
         lblValueScore = scrGameOver.findElementById("lblValueScore")
                 .getRenderer(TextRenderer.class);
-        
+        lblScoreHigh.setText(String.valueOf(hs.getLngHighestScore()));
     }
 
     protected int pointPerTicks = 1;
@@ -130,7 +133,7 @@ public class HUDGuiState extends SagutGuiState {
         lblValueHigh.setText(String.valueOf(hs.getLngHighestScore()));
         lblValueScore.setText(String.valueOf(scoreTotal));
         nifty.gotoScreen("scrGameOver");
-        ((Main)sapp).triggerStartGame();
+        //((Main)sapp).triggerStartGame();
     }
     
     public void triggerResetScore() {

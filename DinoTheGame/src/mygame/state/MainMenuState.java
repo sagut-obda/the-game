@@ -210,6 +210,5 @@ public class MainMenuState extends SagutAppState {
             i++;
         }
         gameOverDebouncer = false ;
-        ((HUDGuiState)stateManager.getState(HUDGuiState.class)).updateScore(0);
     }
 }

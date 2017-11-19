@@ -4,19 +4,26 @@
     <useStyles filename="nifty-default-styles.xml"/>
     <screen id="scrHUD" controller="mygame.state.gui.HUDGuiState">
         <layer id="GLayer2" childLayout="center" valign="top" align="right">
-            <panel id="GPanel4" childLayout="center" width="50%" x="389" y="8" style="nifty-panel-simple" valign="top" align="right" height="47px">
-                <control name="label" id="lblScore" width="50%" x="197" y="26" valign="center" text="1000" align="right" font="aurulent-sans-16.fnt" height="25px"/>
+            <panel id="GPanel0" childLayout="absolute" width="436px" x="51" y="78" valign="top" align="left" height="97px">
+                <panel id="GPanel1" childLayout="absolute" backgroundImage="Interface/hud-resources/hud_img-score-aichan.png" width="224px" x="-1" y="0" height="88px">
+                    <control name="label" id="lblScore" width="100px" x="100" y="35" valign="center" text="1000" align="right" height="50px" font="aurulent-sans-16.fnt"/>
+                </panel>
+                <panel id="GPanel2" childLayout="absolute" backgroundImage="Interface/hud-resources/hud_img-score-highscroe-beaten.png" width="177px" x="238" y="44" height="39px">
+                    <control name="label" id="lblScoreHigh" width="100px" x="40" y="-9" text="GLabel2" height="50px" font="aurulent-sans-16.fnt"/>
+                </panel>
             </panel>
+            <image id="GImage1" filename="Interface/hud-resources/hud_img-gameplay-objective.png" valign="bottom" align="center">
+                <effect>
+                    <onStartScreen name="fade" startDelay="2000" start="#f" end="#0" length="500" neverStopRendering="true"/>
+                </effect>
+            </image>
         </layer>
     </screen>
     <screen id="scrGameOver">
-        <layer id="GLayer3" childLayout="center" valign="center" align="center">
-            <panel id="GPanel1" childLayout="absolute" visibleToMouse="true" style="nifty-panel-simple" valign="center" align="center" height="200px" width="430px">
-                <control name="label" id="lblMainTitle" width="100px" x="145" y="17" text="Game Over" height="50px" font="aurulent-sans-16.fnt"/>
-                <control name="label" id="lblTitleScore" width="100px" x="43" y="60" text="Your Score:" height="50px" font="aurulent-sans-16.fnt"/>
-                <control name="label" id="lblValueScore" width="100px" x="43" y="100" text="0" height="50px" font="aurulent-sans-16.fnt"/>
-                <control name="label" id="lblTitleHigh" width="100px" x="263" y="60" text="High Score:" height="50px" font="aurulent-sans-16.fnt"/>
-                <control name="label" id="lblValueHigh" width="100px" x="263" y="100" text="0" height="50px" font="aurulent-sans-16.fnt"/>
+        <layer id="GLayer3" childLayout="center">
+            <panel id="GPanel4" childLayout="absolute" backgroundImage="Interface/hud-resources/hud_img-game-over.png" width="694px" height="371px">
+                <control name="label" id="lblValueScore" width="100px" x="395" y="170" text="0" height="50px" font="aurulent-sans-16.fnt"/>
+                <control name="label" id="lblValueHigh" width="100px" x="395" y="230" text="0" height="50px" font="aurulent-sans-16.fnt"/>
             </panel>
         </layer>
     </screen>
